@@ -1,6 +1,1639 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Remya — Salesforce Developer & Tech Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #16161f;
+    --surface: #1c1c27;
+    --border: #2a2a3a;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --text: #e8e8f0;
+    --text2: #9090a8;
+    --text3: #5a5a72;
+    --white: #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--accent); color: #fff; }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .nav-logo {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--white);
+    letter-spacing: -0.5px;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    padding: 8px 20px;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    color: var(--accent) !important;
+    transition: all 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--accent); color: #fff !important; }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Animated grid background */
+  #hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(108,99,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(108,99,255,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+  }
+
+  /* Gradient orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    animation: orb-float 8s ease-in-out infinite;
+  }
+
+  .orb-1 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(108,99,255,0.15), transparent 70%);
+    top: -100px; right: 100px;
+    animation-delay: 0s;
+  }
+
+  .orb-2 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(0,212,170,0.12), transparent 70%);
+    bottom: 100px; right: 200px;
+    animation-delay: -3s;
+  }
+
+  .orb-3 {
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(255,107,107,0.1), transparent 70%);
+    top: 200px; left: -50px;
+    animation-delay: -5s;
+  }
+
+  @keyframes orb-float {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-30px) scale(1.05); }
+  }
+
+  .hero-left {
+    position: relative;
+    z-index: 2;
+    animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 32px;
+    background: var(--bg2);
+    animation: fade-up 0.9s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(44px, 5.5vw, 80px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    color: var(--white);
+    margin-bottom: 24px;
+    animation: fade-up 0.9s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero-name .line2 {
+    display: block;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+  }
+
+  .hero-name .accent { color: var(--accent); -webkit-text-stroke: 0; }
+
+  .hero-desc {
+    font-size: 15px;
+    color: var(--text2);
+    max-width: 480px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    font-family: 'DM Mono', monospace;
+    animation: fade-up 0.9s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero-desc strong { color: var(--text); }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: fade-up 0.9s 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .btn-primary {
+    padding: 14px 28px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-primary:hover { background: #5a52e8; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(108,99,255,0.35); }
+
+  .btn-secondary {
+    padding: 14px 28px;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  .hero-right {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    animation: fade-up 0.9s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    width: 320px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .stat-item {
+    padding: 16px;
+    background: var(--bg3);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .stat-num {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .cert-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(0,212,170,0.08));
+    border: 1px solid rgba(108,99,255,0.25);
+    border-radius: 10px;
+  }
+
+  .cert-icon {
+    width: 36px; height: 36px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .cert-text { font-size: 11px; color: var(--text2); line-height: 1.5; }
+  .cert-text strong { color: var(--accent); font-size: 12px; display: block; }
+
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  .tech-pill {
+    padding: 4px 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 10px;
+    color: var(--text2);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── SECTION LAYOUT ─── */
+  section { padding: 100px 48px; }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 64px;
+  }
+
+  .section-num {
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .section-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    margin-left: 16px;
+  }
+
+  /* ─── ABOUT ─── */
+  #about {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .about-text p {
+    font-size: 15px;
+    color: var(--text2);
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+
+  .about-text p strong { color: var(--text); }
+
+  .about-text p:first-child {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    color: var(--text);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .about-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .about-card {
+    padding: 20px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.2s;
+  }
+
+  .about-card:hover { border-color: var(--accent); }
+
+  .about-card-icon { font-size: 24px; margin-bottom: 10px; }
+
+  .about-card-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .about-card p { font-size: 12px; color: var(--text3); line-height: 1.6; }
+
+  /* ─── SKILLS ─── */
+  #skills { background: var(--bg); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .skill-category {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .skill-category:hover { transform: translateY(-4px); border-color: var(--accent); }
+
+  .skill-category::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .skill-category:hover::before { opacity: 1; }
+
+  .skill-category.cat-sf::before { background: linear-gradient(90deg, #6c63ff, #8b83ff); }
+  .skill-category.cat-ecom::before { background: linear-gradient(90deg, #00d4aa, #00f5c8); }
+  .skill-category.cat-ai::before { background: linear-gradient(90deg, #ff6b6b, #ff9a9a); }
+  .skill-category.cat-web::before { background: linear-gradient(90deg, #ffd93d, #ffe88a); }
+
+  .skill-cat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .skill-cat-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .cat-sf .skill-cat-icon { background: rgba(108,99,255,0.15); }
+  .cat-ecom .skill-cat-icon { background: rgba(0,212,170,0.15); }
+  .cat-ai .skill-cat-icon { background: rgba(255,107,107,0.15); }
+  .cat-web .skill-cat-icon { background: rgba(255,217,61,0.15); }
+
+  .skill-cat-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .skill-tag {
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    border: 1px solid;
+    transition: all 0.15s;
+  }
+
+  .cat-sf .skill-tag { background: rgba(108,99,255,0.08); border-color: rgba(108,99,255,0.25); color: #a8a1ff; }
+  .cat-sf .skill-tag:hover { background: rgba(108,99,255,0.2); }
+  .cat-ecom .skill-tag { background: rgba(0,212,170,0.08); border-color: rgba(0,212,170,0.25); color: #5ffadf; }
+  .cat-ecom .skill-tag:hover { background: rgba(0,212,170,0.2); }
+  .cat-ai .skill-tag { background: rgba(255,107,107,0.08); border-color: rgba(255,107,107,0.25); color: #ffaaaa; }
+  .cat-ai .skill-tag:hover { background: rgba(255,107,107,0.2); }
+  .cat-web .skill-tag { background: rgba(255,217,61,0.08); border-color: rgba(255,217,61,0.25); color: #ffe98a; }
+  .cat-web .skill-tag:hover { background: rgba(255,217,61,0.2); }
+
+  /* ─── EXPERIENCE ─── */
+  #experience {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(180deg, var(--accent), var(--accent2), transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding: 0 0 48px 32px;
+  }
+
+  .timeline-item:last-child { padding-bottom: 0; }
+
+  .timeline-dot {
+    position: absolute;
+    left: -28px;
+    top: 6px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--bg2);
+    border: 2px solid var(--accent);
+    z-index: 2;
+    transition: all 0.2s;
+  }
+
+  .timeline-item:hover .timeline-dot {
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+  }
+
+  .timeline-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .timeline-role {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .timeline-badge {
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .badge-sf { background: rgba(108,99,255,0.15); color: var(--accent); border: 1px solid rgba(108,99,255,0.25); }
+  .badge-startup { background: rgba(0,212,170,0.12); color: var(--accent2); border: 1px solid rgba(0,212,170,0.25); }
+  .badge-ai { background: rgba(255,107,107,0.12); color: var(--accent3); border: 1px solid rgba(255,107,107,0.25); }
+
+  .timeline-client {
+    font-size: 12px;
+    color: var(--text3);
+    margin-bottom: 14px;
+    letter-spacing: 0.05em;
+  }
+
+  .timeline-desc {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+
+  .timeline-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .timeline-bullets li {
+    font-size: 13px;
+    color: var(--text2);
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .timeline-bullets li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 10px;
+    top: 4px;
+  }
+
+  /* ─── PROJECTS ─── */
+  #projects { background: var(--bg); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 24px;
+  }
+
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(108,99,255,0.07), transparent 60%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .project-card:hover::after { opacity: 1; }
+  .project-card:hover { transform: translateY(-6px); border-color: rgba(108,99,255,0.4); box-shadow: 0 24px 48px rgba(0,0,0,0.4); }
+
+  .project-card.featured {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;
+    background: linear-gradient(135deg, var(--bg2), rgba(108,99,255,0.06));
+  }
+
+  .project-card.featured .project-body { flex: 1; }
+
+  .project-visual {
+    width: 140px;
+    height: 140px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    flex-shrink: 0;
+  }
+
+  .proj-sashel .project-visual { background: linear-gradient(135deg, rgba(0,212,170,0.15), rgba(0,212,170,0.05)); border: 1px solid rgba(0,212,170,0.2); }
+  .proj-ai .project-visual { background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,107,107,0.05)); border: 1px solid rgba(255,107,107,0.2); }
+  .proj-oms .project-visual { background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(108,99,255,0.05)); border: 1px solid rgba(108,99,255,0.2); }
+
+  .project-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+
+  .project-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+  }
+
+  .project-type {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    padding: 4px 10px;
+    background: var(--bg3);
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .project-desc {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.8;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+  }
+
+  .project-tag {
+    padding: 4px 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.04em;
+  }
+
+  .project-highlights {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .project-highlights li {
+    font-size: 12px;
+    color: var(--text2);
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .project-highlights li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent2);
+    font-size: 11px;
+  }
+
+  /* ─── AI SECTION ─── */
+  #ai-experiments {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #ai-experiments::before {
+    content: 'AI';
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 320px;
+    font-weight: 800;
+    color: rgba(255,107,107,0.03);
+    line-height: 1;
+    pointer-events: none;
+    letter-spacing: -20px;
+  }
+
+  .ai-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .ai-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    justify-content: center;
+  }
+
+  .ai-intro p {
+    font-size: 15px;
+    color: var(--text2);
+    line-height: 1.9;
+  }
+
+  .ai-intro p strong { color: var(--text); }
+
+  .ai-intro-quote {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    font-style: italic;
+    color: var(--accent3);
+    line-height: 1.5;
+    padding-left: 20px;
+    border-left: 2px solid var(--accent3);
+  }
+
+  .ai-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ai-card {
+    padding: 20px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--accent3), var(--accent));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .ai-card:hover { border-color: rgba(255,107,107,0.3); }
+  .ai-card:hover::before { opacity: 1; }
+
+  .ai-card-icon {
+    width: 40px; height: 40px;
+    background: rgba(255,107,107,0.12);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .ai-card-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .ai-card-desc { font-size: 12px; color: var(--text3); line-height: 1.6; }
+
+  /* ─── EDUCATION & CERT ─── */
+  #education { background: var(--bg); }
+
+  .edu-cert-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .edu-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    transition: all 0.2s;
+  }
+
+  .edu-block:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+  .edu-block-icon { font-size: 40px; margin-bottom: 20px; }
+
+  .edu-block-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+
+  .edu-block-sub {
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+
+  .edu-block-desc {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.8;
+  }
+
+  .cert-features {
+    list-style: none;
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cert-features li {
+    font-size: 12px;
+    color: var(--text2);
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .cert-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--accent2);
+  }
+
+  /* ─── CONTACT ─── */
+  #contact {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+  }
+
+  .contact-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .contact-eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .contact-headline {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(32px, 4.5vw, 56px);
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .contact-sub {
+    font-size: 14px;
+    color: var(--text2);
+    margin-bottom: 48px;
+    line-height: 1.8;
+  }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+
+  .contact-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+
+  .contact-link-icon { font-size: 18px; }
+
+  .contact-link-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); }
+
+  .contact-link-text { font-size: 13px; color: var(--text); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 32px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+
+    #hero {
+      grid-template-columns: 1fr;
+      padding: 100px 24px 60px;
+      gap: 48px;
+    }
+
+    .hero-right { justify-content: center; }
+
+    section { padding: 80px 24px; }
+
+    .about-grid,
+    .ai-grid,
+    .edu-cert-grid { grid-template-columns: 1fr; gap: 40px; }
+
+    .project-card.featured { flex-direction: column; }
+
+    footer { flex-direction: column; gap: 12px; text-align: center; }
+  }
+
+  @media (max-width: 600px) {
+    .hero-name { font-size: 48px; letter-spacing: -2px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Remya<span>.</span>dev</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#ai-experiments">AI</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="hero-left">
+    <div class="hero-tag">Available for opportunities</div>
+    <h1 class="hero-name">
+      Remya
+      <span class="line2">C<span class="accent">.</span></span>
+    </h1>
+    <p class="hero-desc">
+      Building scalable systems on the <strong>Salesforce platform</strong> — from Order Management to Service Cloud. Background in <strong>CS Engineering</strong> with hands-on experience in e-commerce, AI automation, and startup product development.
+    </p>
+    <div class="hero-btns">
+      <a href="#experience" class="btn-primary">View Experience →</a>
+      <a href="#contact" class="btn-secondary">Get in Touch</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-card">
+      <div class="stat-grid">
+        <div class="stat-item">
+          <div class="stat-num">PD1</div>
+          <div class="stat-label">SF Certified</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Certifications</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">OMS</div>
+          <div class="stat-label">Specialist</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">2+</div>
+          <div class="stat-label">Yrs Exp</div>
+        </div>
+      </div>
+      <div class="cert-badge">
+        <div class="cert-icon">🏆</div>
+        <div class="cert-text">
+          <strong>4 Active Certifications</strong>
+          SF PD1 · AI Associate · Agentforce · Shopify
+        </div>
+      </div>
+      <div class="tech-stack">
+        <span class="tech-pill">Apex</span>
+        <span class="tech-pill">LWC</span>
+        <span class="tech-pill">Flows</span>
+        <span class="tech-pill">Shopify</span>
+        <span class="tech-pill">Agentforce</span>
+        <span class="tech-pill">REST API</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title">About</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>A Salesforce Developer and technology builder with a foundation in Computer Science Engineering — focused on building systems that are reliable, scalable, and genuinely useful.</p>
+      <p>My core work is in the <strong>Salesforce ecosystem</strong> — developing automation, integrations, and custom interfaces across Order Management and Service Cloud. I think in systems: how processes connect, where automation creates leverage, and how technical decisions compound over time.</p>
+      <p>Outside of Salesforce work, I'm actively involved in <strong>early-stage product building</strong>. I've been part of the validation team for Sashel, a multi-vendor jewellery marketplace, contributing to platform strategy and early development using Shopify. This experience has sharpened my thinking around product-market fit, marketplace dynamics, and pragmatic MVP execution.</p>
+      <p>I'm also genuinely curious about <strong>AI and automation</strong> — not just as tools, but as a new layer of capability in product development. I experiment regularly with AI agents, workflow automation, and generative AI tools to understand where they create real value.</p>
+    </div>
+    <div class="about-sidebar reveal">
+      <div class="about-card">
+        <div class="about-card-icon">⚙️</div>
+        <div class="about-card-title">Systems Thinker</div>
+        <p>Approaches development by understanding the full process — not just the code, but how it fits into operations and business outcomes.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">🚀</div>
+        <div class="about-card-title">Startup Mindset</div>
+        <p>Comfortable working in early-stage, ambiguous environments. Values speed, iteration, and practical solutions over over-engineering.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">🧪</div>
+        <div class="about-card-title">AI Experimenter</div>
+        <p>Actively tests AI tools and automation workflows — not just observing trends, but building intuition through hands-on experimentation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Skills</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+
+    <div class="skill-category cat-sf reveal">
+      <div class="skill-cat-header">
+        <div class="skill-cat-icon">☁️</div>
+        <div class="skill-cat-name">Salesforce Development</div>
+      </div>
+      <div class="skill-tags">
+        <span class="skill-tag">Apex</span>
+        <span class="skill-tag">Lightning Web Components</span>
+        <span class="skill-tag">Visualforce</span>
+        <span class="skill-tag">Salesforce Flows</span>
+        <span class="skill-tag">Order Management (OMS)</span>
+        <span class="skill-tag">Service Cloud</span>
+        <span class="skill-tag">Case Management</span>
+        <span class="skill-tag">Platform Events</span>
+        <span class="skill-tag">Batch Apex</span>
+        <span class="skill-tag">Queueable Apex</span>
+        <span class="skill-tag">Connect API</span>
+        <span class="skill-tag">REST Integrations</span>
+        <span class="skill-tag">Service Processes & SLAs</span>
+      </div>
+    </div>
+
+    <div class="skill-category cat-ecom reveal">
+      <div class="skill-cat-header">
+        <div class="skill-cat-icon">🛍️</div>
+        <div class="skill-cat-name">E-Commerce Platforms</div>
+      </div>
+      <div class="skill-tags">
+        <span class="skill-tag">Shopify</span>
+        <span class="skill-tag">Store Setup & Management</span>
+        <span class="skill-tag">Marketplace Product Strategy</span>
+        <span class="skill-tag">Multi-vendor Platform Concepts</span>
+      </div>
+    </div>
+
+    <div class="skill-category cat-ai reveal">
+      <div class="skill-cat-header">
+        <div class="skill-cat-icon">🤖</div>
+        <div class="skill-cat-name">AI & Automation</div>
+      </div>
+      <div class="skill-tags">
+        <span class="skill-tag">Agentforce AI</span>
+        <span class="skill-tag">Generative AI (Claude)</span>
+        <span class="skill-tag">AI Workflow Automation</span>
+        <span class="skill-tag">AI Agent Experimentation</span>
+        <span class="skill-tag">Prompt Engineering</span>
+        <span class="skill-tag">AI-assisted Development</span>
+      </div>
+    </div>
+
+    <div class="skill-category cat-web reveal">
+      <div class="skill-cat-header">
+        <div class="skill-cat-icon">🌐</div>
+        <div class="skill-cat-name">Web & Development</div>
+      </div>
+      <div class="skill-tags">
+        <span class="skill-tag">HTML</span>
+        <span class="skill-tag">CSS</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">API Integrations</span>
+        <span class="skill-tag">System Automation</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Experience</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-meta">
+        <div class="timeline-role">Salesforce Developer</div>
+        <span class="timeline-badge badge-sf">Salesforce</span>
+        <span class="timeline-badge" style="background:rgba(255,255,255,0.05);color:var(--text3);border:1px solid var(--border)">Oct 2023 — Present</span>
+      </div>
+      <div class="timeline-client">Platform Development · Salesforce OMS & Service Cloud</div>
+      <div class="timeline-desc">
+        Delivered Salesforce platform implementations with a focus on Order Management and Service Cloud. Responsible for the full development cycle — from automation design to integration and UI development.
+      </div>
+      <ul class="timeline-bullets">
+        <li>Built automation pipelines using Flows, Apex, Batch Classes, and Queueable Apex for scalable async processing</li>
+        <li>Developed LWC wizard interfaces to streamline internal user workflows</li>
+        <li>Implemented event-driven automation architecture using Salesforce Platform Events</li>
+        <li>Built REST API integrations and leveraged Salesforce Connect API for external system connectivity</li>
+        <li>Supported scalable order processing systems with performance-optimised Apex patterns</li>
+      </ul>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-meta">
+        <div class="timeline-role">Salesforce OMS — Book Publishing Client</div>
+        <span class="timeline-badge badge-sf">Project</span>
+      </div>
+      <div class="timeline-client">Order Management System Implementation</div>
+      <div class="timeline-desc">
+        Contributed to a full Salesforce OMS implementation for a book publishing company, covering the entire order lifecycle from placement to fulfilment.
+      </div>
+      <ul class="timeline-bullets">
+        <li>Designed and built Flows and Apex automation for order lifecycle management</li>
+        <li>Created LWC-based employee wizard interfaces for internal order operations</li>
+        <li>Developed Batch Apex and Queueable jobs for high-volume, asynchronous order processing</li>
+        <li>Supported end-to-end order workflow design and operational process mapping</li>
+      </ul>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-meta">
+        <div class="timeline-role">Salesforce Service Cloud Implementation</div>
+        <span class="timeline-badge badge-sf">Project</span>
+      </div>
+      <div class="timeline-client">Service Cloud · Case Management & SLAs</div>
+      <div class="timeline-desc">
+        Implemented Service Cloud processes for a client, improving service operations through structured case management and automated service workflows.
+      </div>
+      <ul class="timeline-bullets">
+        <li>Designed service workflows to map customer support processes onto the Salesforce platform</li>
+        <li>Implemented case management processes including routing, escalation, and resolution workflows</li>
+        <li>Configured SLAs and service automation to enforce response time standards</li>
+        <li>Enhanced service agent productivity through targeted Salesforce customisation</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Projects</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="projects-grid">
+
+    <div class="project-card proj-sashel featured reveal">
+      <div class="project-visual">💎</div>
+      <div class="project-body">
+        <div class="project-header">
+          <div class="project-title">Sashel — Multi-Vendor Jewellery Marketplace</div>
+          <span class="project-type">Startup · Aug 2025 – Present</span>
+        </div>
+        <p class="project-desc">
+          Part of the early validation team for Sashel — a curated multi-vendor jewellery marketplace concept, similar in model to Nykaa but focused on jewellery brands. Contributing to platform validation, brand onboarding, and MVP development on Shopify, with a roadmap toward a custom full-stack marketplace.
+        </p>
+        <ul class="project-highlights">
+          <li>Supporting product concept validation and go-to-market strategy</li>
+          <li>Working on jewellery brand onboarding and vendor relationship processes</li>
+          <li>Helping build and manage the Shopify-based MVP</li>
+          <li>Contributing to planning for a future custom full-stack marketplace platform</li>
+        </ul>
+        <div class="project-tags">
+          <span class="project-tag">Shopify</span>
+          <span class="project-tag">E-commerce</span>
+          <span class="project-tag">Multi-vendor</span>
+          <span class="project-tag">Startup</span>
+          <span class="project-tag">Product Strategy</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card proj-oms reveal">
+      <div class="project-visual">📦</div>
+      <div>
+        <div class="project-header">
+          <div class="project-title">Salesforce OMS — Publishing Platform</div>
+          <span class="project-type">Salesforce</span>
+        </div>
+        <p class="project-desc">
+          End-to-end Order Management System implementation for a book publishing company. Built the automation, async processing, and internal tooling that powers order operations at scale.
+        </p>
+        <div class="project-tags" style="margin-top:16px">
+          <span class="project-tag">Salesforce OMS</span>
+          <span class="project-tag">Apex</span>
+          <span class="project-tag">LWC</span>
+          <span class="project-tag">Batch Processing</span>
+          <span class="project-tag">Flows</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card proj-ai reveal">
+      <div class="project-visual">🤖</div>
+      <div>
+        <div class="project-header">
+          <div class="project-title">AI Workflow Experiments</div>
+          <span class="project-type">AI / Personal</span>
+        </div>
+        <p class="project-desc">
+          Ongoing experimentation with AI agents and automation systems — building small tools, testing AI-assisted development workflows, and exploring what productized AI looks like in practice.
+        </p>
+        <div class="project-tags" style="margin-top:16px">
+          <span class="project-tag">Agentforce</span>
+          <span class="project-tag">Claude</span>
+          <span class="project-tag">AI Agents</span>
+          <span class="project-tag">Automation</span>
+          <span class="project-tag">Generative AI</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- AI EXPERIMENTS -->
+<section id="ai-experiments">
+  <div class="section-header reveal">
+    <span class="section-num">05</span>
+    <h2 class="section-title">AI & Automation</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="ai-grid">
+    <div class="ai-intro reveal">
+      <div class="ai-intro-quote">
+        "AI isn't a feature — it's a new layer of how systems can be designed."
+      </div>
+      <p>
+        AI experimentation is a consistent part of how I work and think. I use <strong>generative AI tools</strong> in development, system design, and problem-solving — not just to move faster, but to think differently about what's possible in product and automation.
+      </p>
+      <p>
+        My interest in <strong>Agentforce AI</strong> is particularly relevant as the Salesforce ecosystem expands into agentic workflows. I've been exploring how AI agents can replace or augment manual processes in CRM and order management contexts.
+      </p>
+      <p>
+        Beyond Salesforce, I'm experimenting with broader <strong>AI automation concepts</strong> — small workflow tools, digital agents, and systems that combine structured data with generative capabilities.
+      </p>
+    </div>
+
+    <div class="ai-cards reveal">
+      <div class="ai-card">
+        <div class="ai-card-icon">⚡</div>
+        <div>
+          <div class="ai-card-title">Agentforce AI</div>
+          <div class="ai-card-desc">Exploring Salesforce's native AI agent capabilities — how agents can be configured to handle service, sales, and operational workflows autonomously.</div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-icon">🧠</div>
+        <div>
+          <div class="ai-card-title">Generative AI in Development</div>
+          <div class="ai-card-desc">Using Claude and other LLMs as development partners — for code generation, architecture review, documentation, and problem decomposition.</div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-icon">🔁</div>
+        <div>
+          <div class="ai-card-title">AI Workflow Automation</div>
+          <div class="ai-card-desc">Building small automation tools that connect AI capabilities with structured data sources and APIs — reducing manual work in repeatable processes.</div>
+        </div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-icon">🧪</div>
+        <div>
+          <div class="ai-card-title">Productized AI Concepts</div>
+          <div class="ai-card-desc">Thinking about how AI capabilities can be packaged as tools or services — exploring the intersection of AI, automation, and product development.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION & CERT -->
+<section id="education">
+  <div class="section-header reveal">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Education & Certs</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="edu-cert-grid">
+    <div class="edu-block reveal">
+      <div class="edu-block-icon">🎓</div>
+      <div class="edu-block-title">B.Tech — Computer Science & Engineering</div>
+      <div class="edu-block-sub">College of Engineering Chengannur · 2018 – 2022</div>
+      <div class="edu-block-desc">
+        Graduated with a CGPA of <strong style="color:var(--accent2)">8.12</strong>. Strong foundation in software development, data structures, algorithms, and system architecture. The CS engineering background directly shapes how I approach Salesforce development — with focus on performance, scalability, and clean system design.
+      </div>
+      <ul class="cert-features">
+        <li>Software development fundamentals</li>
+        <li>System architecture & design</li>
+        <li>Algorithms & problem solving</li>
+        <li>Database & data modelling concepts</li>
+      </ul>
+    </div>
+
+    <div class="edu-block reveal" style="display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+        <span style="font-size:28px;">🏆</span>
+        <div>
+          <div class="edu-block-title" style="margin-bottom:2px;">Certifications</div>
+          <div class="edu-block-sub" style="margin-bottom:0">Salesforce & Shopify · Verified</div>
+        </div>
+      </div>
+
+      <div style="padding:14px 16px;background:var(--bg);border:1px solid rgba(108,99,255,0.3);border-radius:10px;display:flex;align-items:center;gap:14px;">
+        <div style="width:36px;height:36px;background:rgba(108,99,255,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">☁️</div>
+        <div>
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px;">Salesforce Platform Developer I</div>
+          <div style="font-size:11px;color:var(--text3);">Salesforce · Core development certification</div>
+        </div>
+      </div>
+
+      <div style="padding:14px 16px;background:var(--bg);border:1px solid rgba(255,107,107,0.3);border-radius:10px;display:flex;align-items:center;gap:14px;">
+        <div style="width:36px;height:36px;background:rgba(255,107,107,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🤖</div>
+        <div>
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px;">Salesforce AI Associate</div>
+          <div style="font-size:11px;color:var(--text3);">Salesforce · AI fundamentals & applications</div>
+        </div>
+      </div>
+
+      <div style="padding:14px 16px;background:var(--bg);border:1px solid rgba(255,107,107,0.3);border-radius:10px;display:flex;align-items:center;gap:14px;">
+        <div style="width:36px;height:36px;background:rgba(255,107,107,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">⚡</div>
+        <div>
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px;">Salesforce Agentforce Specialist</div>
+          <div style="font-size:11px;color:var(--text3);">Salesforce · AI agent development & deployment</div>
+        </div>
+      </div>
+
+      <div style="padding:14px 16px;background:var(--bg);border:1px solid rgba(0,212,170,0.3);border-radius:10px;display:flex;align-items:center;gap:14px;">
+        <div style="width:36px;height:36px;background:rgba(0,212,170,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🛍️</div>
+        <div>
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px;">Shopify Fundamentals</div>
+          <div style="font-size:11px;color:var(--text3);">Shopify · E-commerce platform & store management</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-eyebrow reveal">Get in touch</div>
+    <h2 class="contact-headline reveal">Let's build something.</h2>
+    <p class="contact-sub reveal">
+      Open to Salesforce development roles, startup collaborations, and conversations about AI, automation, and product building. If something here resonates — reach out.
+    </p>
+    <div class="contact-links reveal">
+      <a href="https://linkedin.com/in/remya-chandrasekhar-89337916a" class="contact-link" target="_blank">
+        <span class="contact-link-icon">💼</span>
+        <span>
+          <span class="contact-link-label">Connect</span>
+          <span class="contact-link-text">LinkedIn</span>
+        </span>
+      </a>
+      <a href="https://github.com/remyacode" class="contact-link" target="_blank">
+        <span class="contact-link-icon">🐙</span>
+        <span>
+          <span class="contact-link-label">Code</span>
+          <span class="contact-link-text">GitHub</span>
+        </span>
+      </a>
+      <a href="mailto:remyachandrasekhar710@gmail.com" class="contact-link">
+        <span class="contact-link-icon">✉️</span>
+        <span>
+          <span class="contact-link-label">Email</span>
+          <span class="contact-link-text">your.email@gmail.com</span>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>remya S — Salesforce Developer & Tech Builder</span>
+  <span>© 2025</span>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        const delay = e.target.dataset.delay || 0;
+        setTimeout(() => e.target.classList.add('visible'), delay);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  reveals.forEach((el, i) => {
+    el.dataset.delay = (i % 4) * 80;
+    io.observe(el);
+  });
+
+  // Smooth nav highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+    });
+  });
+</script>
+
+</body>
+</html>
+
+
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Remya C | Interactive Digital Profile</title>
@@ -110,7 +1743,7 @@
 </head>
 <body class="antialiased">
 
-    <!-- Modal for AI Summary -->
+     Modal for AI Summary 
     <div id="aiSummaryModal" class="modal">
         <div class="modal-content w-11/12">
             <span class="close-btn" onclick="closeModal('aiSummaryModal')">&times;</span>
@@ -129,7 +1762,7 @@
         </div>
     </div>
 
-    <!-- Modal for Job Matcher Result -->
+     Modal for Job Matcher Result
     <div id="matcherResultModal" class="modal">
         <div class="modal-content w-11/12">
             <span class="close-btn" onclick="closeModal('matcherResultModal')">&times;</span>
@@ -137,7 +1770,7 @@
                 ✨ Job Fit Analysis
             </h3>
             <div id="matcherContent" class="space-y-4">
-                <!-- Results injected here -->
+                <!-- Results injected here 
             </div>
             <div id="matcherLoading" class="hidden text-center mt-4 text-orange-600 font-semibold">
                 Analyzing match...
@@ -146,7 +1779,7 @@
     </div>
 
 
-    <!-- Navigation -->
+     Navigation 
     <nav class="sticky top-0 z-50 glass-panel border-b border-stone-200">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
@@ -159,10 +1792,10 @@
                     <button onclick="scrollToSection('projects')" class="text-stone-600 hover:text-orange-600 transition-colors">Projects</button>
                     <button onclick="scrollToSection('certs')" class="text-stone-600 hover:text-orange-600 transition-colors">Certifications</button>
                 </div>
-                <!-- Mobile Menu Button (simplified for SPA) -->
+                <!-- Mobile Menu Button (simplified for SPA) 
                 <button onclick="toggleMobileMenu()" class="md:hidden text-stone-600 text-2xl">☰</button>
             </div>
-            <!-- Mobile Menu Dropdown -->
+            <!-- Mobile Menu Dropdown 
             <div id="mobile-menu" class="hidden md:hidden pb-4">
                 <button onclick="scrollToSection('dashboard')" class="block py-2 text-stone-600">Skills & Match</button>
                 <button onclick="scrollToSection('timeline')" class="block py-2 text-stone-600">Experience</button>
@@ -171,7 +1804,7 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section 
     <header class="bg-stone-50 pt-16 pb-12 lg:pt-24 lg:pb-20 px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl mx-auto text-center">
             <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-stone-900 mb-6 tracking-tight">
@@ -193,7 +1826,7 @@
                     Contact Me
                 </a>
             </div>
-            <!-- Quick Stats -->
+            <!-- Quick Stats
             <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
                 <div class="p-4 bg-white rounded-xl shadow-sm border border-stone-100">
                     <div class="text-3xl font-bold text-orange-600">2+</div>
@@ -215,7 +1848,7 @@
         </div>
     </header>
 
-    <!-- Dashboard Section (Skills Analysis & Matcher) -->
+    <!-- Dashboard Section (Skills Analysis & Matcher) 
     <section id="dashboard" class="py-16 bg-white border-t border-stone-200">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-4">
@@ -225,12 +1858,12 @@
                 </p>
             </div>
 
-            <!-- Message Container for validation errors (Replaces alert()) -->
+            <!-- Message Container for validation errors (Replaces alert()) 
             <div id="messageContainer" class="max-w-6xl mx-auto"></div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
                 
-                <!-- Matcher Input (Gemini Feature 2) -->
+                <!-- Matcher Input (Gemini Feature 2) 
                 <div class="lg:col-span-1 bg-stone-50 p-6 rounded-xl border border-stone-200 shadow-lg">
                     <h3 class="text-xl font-semibold text-stone-800 mb-4 flex items-center">
                         <span class="mr-2 text-2xl">🔍</span> ✨ Job Description Matcher
@@ -244,7 +1877,7 @@
                     </button>
                 </div>
                 
-                <!-- Chart 1: Domain Expertise -->
+                <!-- Chart 1: Domain Expertise 
                 <div class="lg:col-span-2">
                     <h3 class="text-xl font-semibold text-stone-800 mb-6 flex items-center">
                         <span class="mr-2">⚡</span> Domain Focus Distribution
@@ -260,7 +1893,7 @@
         </div>
     </section>
 
-    <!-- Timeline Section (Experience) -->
+    <!-- Timeline Section (Experience) 
     <section id="timeline" class="py-16 bg-stone-50">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-12 text-center">
@@ -269,15 +1902,15 @@
             </div>
 
             <div class="relative pl-8 sm:pl-12" id="timeline-container">
-                <!-- Line -->
+                <!-- Line 
                 <div class="timeline-line rounded-full"></div>
 
-                <!-- Timeline items will be injected by JS -->
+                <!-- Timeline items will be injected by JS
             </div>
         </div>
     </section>
 
-    <!-- Projects Section (Portfolio) -->
+    <!-- Projects Section (Portfolio)
     <section id="projects" class="py-16 bg-white border-t border-stone-200">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-10 flex flex-col md:flex-row justify-between items-center">
@@ -285,7 +1918,7 @@
                     <h2 class="text-3xl font-bold text-stone-900 mb-2">Project Portfolio</h2>
                     <p class="text-stone-600">Explore selected works. Filter by technology stack.</p>
                 </div>
-                <!-- Filters -->
+                <!-- Filters 
                 <div class="flex flex-wrap gap-2 justify-center" id="project-filters">
                     <button class="filter-btn active-filter px-4 py-2 rounded-full text-sm font-medium transition-all" data-filter="all">All</button>
                     <button class="filter-btn inactive-filter px-4 py-2 rounded-full text-sm font-medium transition-all" data-filter="salesforce">Salesforce</button>
@@ -294,14 +1927,14 @@
                 </div>
             </div>
 
-            <!-- Projects Grid -->
+            <!-- Projects Grid
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
-                <!-- Cards injected via JS -->
+                <!-- Cards injected via JS
             </div>
         </div>
     </section>
 
-    <!-- Certifications Section -->
+    <!-- Certifications Section
     <section id="certs" class="py-16 bg-stone-900 text-stone-200">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-12 text-center">
@@ -310,12 +1943,12 @@
             </div>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="certs-grid">
-                <!-- Certs injected via JS -->
+                <!-- Certs injected via JS 
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Footer 
     <footer class="bg-stone-950 py-12 text-center border-t border-stone-800">
         <div class="max-w-4xl mx-auto px-4">
             <p class="text-stone-500 mb-4">&copy; 2025 Remya C. All rights reserved.</p>
@@ -327,7 +1960,7 @@
         </div>
     </footer>
 
-    <!-- JavaScript Logic -->
+    <!-- JavaScript Logic
     <script>
         // --- API Configuration ---
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=`;
@@ -852,3 +2485,4 @@
     </script>
 </body>
 </html>
+-->
