@@ -1427,7 +1427,203 @@
 
   </div>
 </section>
+<!-- 
+  ================================================================
+  MEETINGMIND — PORTFOLIO CARD
+  ================================================================
+  WHERE TO PASTE THIS:
+  Open index.html in your Professional GitHub repo.
+  Find your existing Projects section — it will look something like:
+    <section id="projects"> or <div class="projects">
+  Paste this entire block as the FIRST card inside that section.
+  Commit → wait 60 seconds → check remyacode.github.io/Professional/
+  ================================================================
+-->
 
+<div style="
+  background: linear-gradient(135deg, #0A1628 0%, #0D2137 50%, #091520 100%);
+  border: 1px solid rgba(0,161,224,0.3);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,161,224,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,161,224,0.3)'"
+   onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,161,224,0.1)'">
+
+  <!-- Background glow effect -->
+  <div style="
+    position: absolute; top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(0,161,224,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  "></div>
+
+  <!-- Top badges row -->
+  <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+    
+    <!-- App badge -->
+    <span style="
+      background: linear-gradient(135deg, #00A1E0, #06AED4);
+      color: white; font-size: 11px; font-weight: 700;
+      padding: 4px 12px; border-radius: 20px;
+      letter-spacing: 0.5px; text-transform: uppercase;
+    ">🏪 Salesforce App</span>
+    
+    <!-- Live badge -->
+    <span style="
+      background: rgba(39,174,96,0.2); color: #27AE60;
+      border: 1px solid rgba(39,174,96,0.4);
+      font-size: 11px; font-weight: 600;
+      padding: 4px 12px; border-radius: 20px;
+    ">✓ Live</span>
+
+    <!-- CI badge -->
+    <img src="https://img.shields.io/badge/CI-Passing-27AE60?style=flat&logo=github" 
+         alt="CI Passing" style="height:22px; border-radius:4px;">
+
+    <!-- Free badge -->
+    <span style="
+      background: rgba(255,107,53,0.15); color: #FF6B35;
+      border: 1px solid rgba(255,107,53,0.3);
+      font-size: 11px; font-weight: 600;
+      padding: 4px 12px; border-radius: 20px;
+    ">Free</span>
+  </div>
+
+  <!-- Title and description -->
+  <h3 style="
+    color: #ffffff; font-size: 22px; font-weight: 700;
+    margin: 0 0 8px 0; letter-spacing: -0.3px;
+  ">MeetingMind — AI Meeting Debrief for Salesforce</h3>
+
+  <p style="
+    color: #06AED4; font-size: 13px; font-weight: 500;
+    margin: 0 0 14px 0;
+  ">2GP Managed Package · Solo Build · GitHub Actions CI/CD · Gemini API</p>
+
+  <p style="
+    color: rgba(255,255,255,0.75); font-size: 14px; line-height: 1.7;
+    margin: 0 0 20px 0;
+  ">
+    Built and published a free Salesforce package App (not published on AppExchange on that converts 
+    raw meeting notes into structured AI-powered debriefs — key points, action items, 
+    next steps, and sentiment — saved directly on Opportunity, Account, and Case records. 
+    Includes a full GitHub Actions CI/CD pipeline that auto-creates a scratch org, 
+    deploys code, runs Apex tests, and deletes the org on every push.
+  </p>
+
+  <!-- Tech stack chips -->
+  <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px;">
+    <span style="background:rgba(0,161,224,0.12);color:#00A1E0;border:1px solid rgba(0,161,224,0.25);padding:4px 11px;border-radius:6px;font-size:12px;font-weight:600;">Apex</span>
+    <span style="background:rgba(0,161,224,0.12);color:#00A1E0;border:1px solid rgba(0,161,224,0.25);padding:4px 11px;border-radius:6px;font-size:12px;font-weight:600;">LWC</span>
+    <span style="background:rgba(0,161,224,0.12);color:#00A1E0;border:1px solid rgba(0,161,224,0.25);padding:4px 11px;border-radius:6px;font-size:12px;font-weight:600;">Gemini API</span>
+    <span style="background:rgba(0,161,224,0.12);color:#00A1E0;border:1px solid rgba(0,161,224,0.25);padding:4px 11px;border-radius:6px;font-size:12px;font-weight:600;">2GP Managed Package</span>
+    <span style="background:rgba(0,161,224,0.12);color:#00A1E0;border:1px solid rgba(0,161,224,0.25);padding:4px 11px;border-radius:6px;font-size:12px;font-weight:600;">Custom Metadata</span>
+    <span style="background:rgba(0,161,224,0.12);color:#00A1E0;border:1px solid rgba(0,161,224,0.25);padding:4px 11px;border-radius:6px;font-size:12px;font-weight:600;">Named Credentials</span>
+    <span style="background:rgba(0,161,224,0.12);color:#00A1E0;border:1px solid rgba(0,161,224,0.25);padding:4px 11px;border-radius:6px;font-size:12px;font-weight:600;">Salesforce Flow</span>
+    <span style="background:rgba(255,107,53,0.12);color:#FF6B35;border:1px solid rgba(255,107,53,0.25);padding:4px 11px;border-radius:6px;font-size:12px;font-weight:600;">GitHub Actions</span>
+    <span style="background:rgba(255,107,53,0.12);color:#FF6B35;border:1px solid rgba(255,107,53,0.25);padding:4px 11px;border-radius:6px;font-size:12px;font-weight:600;">CI/CD Pipeline</span>
+  </div>
+
+  <!-- Key highlights row -->
+  <div style="
+    display:grid; grid-template-columns: repeat(3, 1fr); gap:12px;
+    margin-bottom:24px;
+  ">
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;text-align:center;">
+      <div style="font-size:22px;margin-bottom:4px;">🏪</div>
+      <div style="color:#fff;font-size:12px;font-weight:700;">App Link</div>
+      <div style="color:rgba(255,255,255,0.5);font-size:11px;">Live URL</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;text-align:center;">
+      <div style="font-size:22px;margin-bottom:4px;">⚡</div>
+      <div style="color:#fff;font-size:12px;font-weight:700;">CI/CD Pipeline</div>
+      <div style="color:rgba(255,255,255,0.5);font-size:11px;">GitHub Actions</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;text-align:center;">
+      <div style="font-size:22px;margin-bottom:4px;">🤖</div>
+      <div style="color:#fff;font-size:12px;font-weight:700;">AI Integration</div>
+      <div style="color:rgba(255,255,255,0.5);font-size:11px;">Gemini API</div>
+    </div>
+  </div>
+
+  <!-- Action buttons -->
+  <div style="display:flex; gap:12px; flex-wrap:wrap;">
+    
+    <!-- Install button — PRIMARY -->
+    <a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04tdM000000SN89QAG"
+       target="_blank" rel="noopener"
+       style="
+         display:inline-flex; align-items:center; gap:8px;
+         background: linear-gradient(135deg, #00A1E0, #06AED4);
+         color: white; text-decoration: none;
+         padding: 11px 22px; border-radius: 8px;
+         font-size: 13px; font-weight: 700;
+         transition: opacity 0.2s ease;
+         box-shadow: 0 4px 14px rgba(0,161,224,0.35);
+       "
+       onmouseover="this.style.opacity='0.85'"
+       onmouseout="this.style.opacity='1'">
+      ↓ Install Free
+    </a>
+
+    <!-- GitHub button -->
+    <a href="https://github.com/remyacode/meetingmind-salesforce"
+       target="_blank" rel="noopener"
+       style="
+         display:inline-flex; align-items:center; gap:8px;
+         background: rgba(255,255,255,0.07);
+         color: rgba(255,255,255,0.9); text-decoration: none;
+         border: 1px solid rgba(255,255,255,0.15);
+         padding: 11px 22px; border-radius: 8px;
+         font-size: 13px; font-weight: 600;
+         transition: background 0.2s ease;
+       "
+       onmouseover="this.style.background='rgba(255,255,255,0.12)'"
+       onmouseout="this.style.background='rgba(255,255,255,0.07)'">
+      ⌥ GitHub
+    </a>
+
+    <!-- Demo button — update with your Loom URL 
+    <a href="YOUR_LOOM_URL_HERE"
+       target="_blank" rel="noopener"
+       style="
+         display:inline-flex; align-items:center; gap:8px;
+         background: rgba(255,107,53,0.12);
+         color: #FF6B35; text-decoration: none;
+         border: 1px solid rgba(255,107,53,0.3);
+         padding: 11px 22px; border-radius: 8px;
+         font-size: 13px; font-weight: 600;
+         transition: background 0.2s ease;
+       "
+       onmouseover="this.style.background='rgba(255,107,53,0.2)'"
+       onmouseout="this.style.background='rgba(255,107,53,0.12)'">
+      ▶ Watch Demo
+    </a> -->
+
+  </div>
+
+  <!-- Version info footer -->
+  <div style="
+    margin-top:20px; padding-top:16px;
+    border-top:1px solid rgba(255,255,255,0.07);
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:8px;
+  ">
+    <span style="color:rgba(255,255,255,0.35);font-size:11px;font-family:monospace;">
+      v1.0 · 2GP · namespace: mmind · 04tdM000000SN89QAG
+    </span>
+    <span style="color:rgba(255,255,255,0.35);font-size:11px;">
+      Spring 2026 · Solo build
+    </span>
+  </div>
+
+</div>
+<!-- END MEETINGMIND PORTFOLIO CARD -->
 <!-- AI EXPERIMENTS -->
 <section id="ai-experiments">
   <div class="section-header reveal">
