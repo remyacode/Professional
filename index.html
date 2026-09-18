@@ -3,928 +3,543 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Remya C — Developer & Builder</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Remya C — AI Developer</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <style>
-/* ── TOKENS ─────────────────────────────────────────── */
-:root {
-  --bg:       #0E0B08;
-  --bg2:      #130F0A;
-  --surface:  #1A1510;
-  --border:   rgba(200,149,90,0.12);
-  --border2:  rgba(200,149,90,0.22);
-  --amber:    #C8955A;
-  --amber2:   #A0896C;
-  --text:     #F5F0E8;
-  --text2:    #A0896C;
-  --text3:    #5C4A32;
-  --white:    #FAF7F2;
-  --fd: 'Cormorant Garamond', serif;
-  --fb: 'DM Sans', sans-serif;
-  --fm: 'JetBrains Mono', monospace;
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#08080e;--bg2:#0e0e1a;
+  --accent:#e8c547;--accent2:#c47b2b;
+  --text:#f0ede6;--muted:#6a6880;--border:rgba(232,197,71,0.1);
+  --fh:'Georgia',serif;--fb:system-ui,-apple-system,sans-serif;
 }
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);overflow-x:hidden}
 
-/* ── RESET ──────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--fb);
-  font-size: 15.5px;
-  line-height: 1.8;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-a { color: inherit; text-decoration: none; }
-::selection { background: var(--amber); color: #fff; }
-::-webkit-scrollbar { width: 2px; }
-::-webkit-scrollbar-thumb { background: var(--amber); }
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.25rem 3rem;display:flex;justify-content:space-between;align-items:center;transition:background .3s,border-color .3s}
+nav.scrolled{background:rgba(8,8,14,0.94);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav-logo{font-family:var(--fh);font-size:1rem;letter-spacing:.05em;opacity:0}
+.nav-links{display:flex;gap:2.5rem}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.82rem;letter-spacing:.07em;transition:color .2s;opacity:0}
+.nav-links a:hover{color:var(--accent)}
 
-/* ── NAV ─────────────────────────────────────────────── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 22px 56px;
-  display: flex; justify-content: space-between; align-items: center;
-  background: rgba(9,9,15,0.75);
-  backdrop-filter: blur(28px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-logo {
-  font-family: var(--fd); font-weight: 600; font-size: 17px;
-  color: var(--white); font-style: italic; letter-spacing: 0;
-}
-.nav-logo em { color: var(--amber); font-style: normal; }
-.nav-links { display: flex; gap: 36px; list-style: none; }
-.nav-links a {
-  font-family: var(--fm); font-size: 11px; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--text2); transition: color 0.2s;
-}
-.nav-links a:hover { color: var(--white); }
-.nav-contact {
-  font-family: var(--fm); font-size: 11px; letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 8px 20px; border: 1px solid var(--border2);
-  border-radius: 6px; color: var(--text2) !important;
-  transition: all 0.2s !important;
-}
-.nav-contact:hover { border-color: var(--amber); color: var(--amber) !important; }
+#hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#hero-canvas{position:absolute;inset:0;z-index:0;width:100%;height:100%}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:860px;padding:0 2rem}
+.hero-eyebrow{font-size:.7rem;letter-spacing:.22em;color:var(--accent);text-transform:uppercase;margin-bottom:1.5rem;opacity:0}
+.hero-h1{font-family:var(--fh);font-size:clamp(3rem,8vw,6.5rem);font-weight:400;line-height:1.04;letter-spacing:-.02em;margin-bottom:1.4rem;opacity:0}
+.hero-h1 em{font-style:italic;color:var(--accent)}
+.hero-sub{font-size:clamp(.95rem,1.8vw,1.15rem);color:var(--muted);line-height:1.75;max-width:480px;margin:0 auto 2.5rem;opacity:0}
+.hero-cta{display:inline-block;padding:.8rem 2rem;background:var(--accent);color:var(--bg);font-size:.82rem;letter-spacing:.07em;text-decoration:none;transition:background .2s;opacity:0}
+.hero-cta:hover{background:var(--accent2);color:#fff}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);text-align:center;opacity:0}
+.hero-scroll p{font-size:.65rem;letter-spacing:.14em;color:var(--muted);margin-bottom:.5rem}
+.hero-scroll span{display:block;width:1px;height:44px;background:linear-gradient(to bottom,var(--accent),transparent);margin:0 auto}
 
-/* ── HERO ─────────────────────────────────────────────── */
-#hero {
-  min-height: 100vh;
-  display: flex; align-items: center;
-  padding: 140px 56px 100px;
-  position: relative; overflow: hidden;
-}
+section{padding:7rem 3rem}
+.container{max-width:1080px;margin:0 auto}
+.sec-label{font-size:.68rem;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:1.2rem}
+.sec-title{font-family:var(--fh);font-size:clamp(1.9rem,3.5vw,3rem);font-weight:400;line-height:1.15;margin-bottom:1.4rem}
+.sec-body{font-size:1rem;color:var(--muted);line-height:1.8;max-width:600px}
 
-/* Cursor spotlight */
-#spotlight {
-  position: absolute; pointer-events: none;
-  width: 700px; height: 700px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(200,149,90,0.10) 0%, transparent 65%);
-  transform: translate(-50%, -50%);
-  transition: left 0.6s var(--ease), top 0.6s var(--ease);
-  z-index: 0;
-}
+#about{background:var(--bg2)}
 
-/* Subtle grid */
-#hero::before {
-  content: '';
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(200,149,90,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(200,149,90,0.04) 1px, transparent 1px);
-  background-size: 80px 80px;
-  mask-image: radial-gradient(ellipse 80% 80% at 40% 50%, black, transparent);
-  pointer-events: none;
-}
+#experience{background:var(--bg)}
+.exp-list{margin-top:3rem;display:flex;flex-direction:column;gap:0}
+.exp-item{padding:2.5rem 0;border-top:1px solid var(--border)}
+.exp-item:last-child{border-bottom:1px solid var(--border)}
+.exp-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;gap:1rem}
+.exp-role{font-family:var(--fh);font-size:1.3rem;font-weight:400;margin-bottom:.3rem}
+.exp-org{font-size:.82rem;color:var(--accent);letter-spacing:.04em}
+.exp-date{font-size:.75rem;color:var(--muted);white-space:nowrap;padding-top:.3rem}
+.exp-tracks{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.exp-track-label{font-size:.68rem;letter-spacing:.16em;color:var(--accent);text-transform:uppercase;margin-bottom:.6rem}
+.exp-track-body{font-size:.86rem;color:var(--muted);line-height:1.7}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.about-tags{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:2rem}
+.tag{padding:.35rem .9rem;border:1px solid var(--border);font-size:.72rem;letter-spacing:.05em;color:var(--muted);transition:border-color .2s,color .2s;cursor:default}
+.tag:hover{border-color:var(--accent);color:var(--accent)}
+#about-canvas-wrap{width:100%;height:320px;position:relative}
+#about-canvas{width:100%;height:100%;display:block}
 
-.hero-inner { position: relative; z-index: 1; max-width: 800px; }
+#projects{background:var(--bg)}
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1px;margin-top:3.5rem;background:var(--border)}
+.proj-card{background:var(--bg2);padding:2.2rem;position:relative;overflow:hidden;transition:background .2s}
+.proj-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transform:scaleX(0);transform-origin:left;transition:transform .35s}
+.proj-card:hover{background:#121220}
+.proj-card:hover::after{transform:scaleX(1)}
+.proj-award{font-size:.62rem;letter-spacing:.15em;color:var(--accent);text-transform:uppercase;margin-bottom:.8rem}
+.proj-name{font-family:var(--fh);font-size:1.2rem;font-weight:400;margin-bottom:.55rem;line-height:1.3}
+.proj-desc{font-size:.86rem;color:var(--muted);line-height:1.65;margin-bottom:1.2rem}
+.proj-stack{display:flex;flex-wrap:wrap;gap:.35rem}
+.proj-stack span{font-size:.66rem;letter-spacing:.04em;color:var(--accent);border:1px solid rgba(232,197,71,.18);padding:.18rem .5rem}
+.proj-link{position:absolute;top:1.5rem;right:1.5rem;font-size:.7rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.proj-link:hover{color:var(--accent)}
 
-.hero-mono {
-  font-family: var(--fm); font-size: 11px; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--text3);
-  margin-bottom: 28px;
-  display: flex; align-items: center; gap: 12px;
-}
-.hero-mono::before {
-  content: ''; width: 32px; height: 1px; background: var(--text3);
-}
+#numbers{background:var(--bg2)}
+.nums-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:3rem}
+.stat{padding:2rem 0;border-top:1px solid var(--border)}
+.stat-n{font-family:var(--fh);font-size:clamp(2.2rem,4.5vw,3.8rem);font-weight:400;line-height:1}
+.stat-n .ac{color:var(--accent)}
+.stat-l{font-size:.78rem;color:var(--muted);margin-top:.6rem;line-height:1.5}
 
-.hero-name {
-  font-family: var(--fd);
-  font-size: clamp(60px, 8.5vw, 124px);
-  font-weight: 300; line-height: 0.92;
-  letter-spacing: -1px; color: var(--white);
-  margin-bottom: 32px;
-}
-.hero-name .ghost {
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(200,149,90,0.25);
-}
+#skills{background:var(--bg)}
+.skills-cols{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3rem}
+.sg{margin-bottom:2.2rem}
+.sg-name{font-size:.68rem;letter-spacing:.16em;color:var(--accent);text-transform:uppercase;margin-bottom:1rem}
+.sg-list{list-style:none}
+.sg-list li{font-size:.88rem;color:var(--muted);padding:.48rem 0;border-bottom:1px solid var(--border);transition:color .2s}
+.sg-list li:hover{color:var(--text)}
 
-.hero-desc {
-  font-size: 17px; color: var(--text2);
-  max-width: 520px; line-height: 1.85;
-  margin-bottom: 48px;
-}
-.hero-desc strong { color: var(--text); font-weight: 500; }
+#contact{background:var(--bg2);text-align:center;padding:8rem 3rem}
+.ct-title{font-family:var(--fh);font-size:clamp(2.2rem,4.5vw,4rem);font-weight:400;line-height:1.1;margin-bottom:1.4rem}
+.ct-sub{font-size:.98rem;color:var(--muted);margin-bottom:3rem}
+.ct-links{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap}
+.ct-link{padding:.85rem 1.8rem;font-size:.82rem;letter-spacing:.06em;text-decoration:none;transition:background .2s,color .2s,border-color .2s}
+.ct-link.p{background:var(--accent);color:var(--bg)}
+.ct-link.p:hover{background:var(--accent2);color:#fff}
+.ct-link.s{border:1px solid var(--border);color:var(--muted)}
+.ct-link.s:hover{border-color:var(--accent);color:var(--accent)}
 
-.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+footer{padding:1.8rem 3rem;text-align:center;font-size:.72rem;color:var(--muted);border-top:1px solid var(--border)}
 
-.btn-solid {
-  padding: 13px 28px; background: var(--amber); color: #0E0B08;
-  border: none; border-radius: 7px;
-  font-family: var(--fm); font-size: 12px; letter-spacing: 0.04em;
-  cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
-  transition: all 0.2s; text-decoration: none;
-}
-.btn-solid:hover { background: #D4A870; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(200,149,90,0.3); }
-
-.btn-ghost {
-  padding: 13px 28px; background: transparent; color: var(--text2);
-  border: 1px solid var(--border2); border-radius: 7px;
-  font-family: var(--fm); font-size: 12px; letter-spacing: 0.04em;
-  cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
-  transition: all 0.2s; text-decoration: none;
-}
-.btn-ghost:hover { border-color: var(--amber); color: var(--amber); transform: translateY(-2px); }
-
-/* Hero footnote stats */
-.hero-foot {
-  margin-top: 80px; padding-top: 40px;
-  border-top: 1px solid var(--border);
-  display: flex; gap: 48px; flex-wrap: wrap;
-}
-.hf-item { display: flex; flex-direction: column; gap: 3px; }
-.hf-num {
-  font-family: var(--fd); font-size: 30px;
-  font-weight: 800; color: var(--white); line-height: 1;
-}
-.hf-num em { color: var(--amber); font-style: normal; }
-.hf-label {
-  font-family: var(--fm); font-size: 10px;
-  letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3);
-}
-
-/* ── SECTION BASE ──────────────────────────────────── */
-section { padding: 112px 56px; }
-section + section { border-top: 1px solid var(--border); }
-
-.s-label {
-  font-family: var(--fm); font-size: 10px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--text3); margin-bottom: 18px;
-}
-.s-title {
-  font-family: var(--fd);
-  font-size: clamp(34px, 4.5vw, 58px);
-  font-weight: 400; color: var(--white);
-  letter-spacing: -0.8px; line-height: 1.1; margin-bottom: 20px;
-}
-.s-body {
-  font-size: 16px; color: var(--text2);
-  max-width: 580px; line-height: 1.9; margin-bottom: 72px;
-}
-.s-body strong { color: var(--text); font-weight: 500; }
-
-/* ── SCROLL REVEAL ─────────────────────────────────── */
-.reveal {
-  opacity: 0; transform: translateY(24px);
-  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
-}
-.reveal.visible { opacity: 1; transform: none; }
-
-/* ── ABOUT ─────────────────────────────────────────── */
-#about { background: var(--bg2); }
-.about-layout {
-  display: grid; grid-template-columns: 1.4fr 0.6fr;
-  gap: 88px; align-items: start;
-}
-.about-pull {
-  font-family: 'Georgia', serif; font-style: italic;
-  font-size: 20px; color: var(--text); line-height: 1.7;
-  margin-bottom: 28px; padding-left: 22px;
-  border-left: 2px solid var(--amber);
-}
-.about-text p {
-  font-size: 15px; color: var(--text2); line-height: 1.9; margin-bottom: 18px;
-}
-.about-text p strong { color: var(--text); font-weight: 500; }
-.about-text p:last-child { margin-bottom: 0; }
-
-.about-aside { display: flex; flex-direction: column; gap: 2px; padding-top: 4px; }
-.aside-row {
-  padding: 18px 0;
-  border-bottom: 1px solid var(--border);
-  display: flex; flex-direction: column; gap: 4px;
-}
-.aside-row:first-child { border-top: 1px solid var(--border); }
-.aside-key {
-  font-family: var(--fm); font-size: 10px; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--text3);
-}
-.aside-val { font-size: 13px; color: var(--text2); line-height: 1.6; }
-.aside-val strong { color: var(--text); font-weight: 500; }
-
-/* ── EXPERIENCE ────────────────────────────────────── */
-#experience { background: var(--bg); }
-.exp-list { display: flex; flex-direction: column; }
-.exp-item {
-  padding: 40px 0;
-  border-bottom: 1px solid var(--border);
-  display: grid; grid-template-columns: 200px 1fr;
-  gap: 48px; align-items: start;
-}
-.exp-item:first-child { border-top: 1px solid var(--border); }
-.exp-left {}
-.exp-period {
-  font-family: var(--fm); font-size: 11px; letter-spacing: 0.06em;
-  color: var(--text3); margin-bottom: 6px;
-}
-.exp-company { font-size: 13px; color: var(--text2); line-height: 1.5; }
-.exp-co-name { font-weight: 500; color: var(--text); }
-.exp-right {}
-.exp-role {
-  font-family: var(--fd); font-size: 22px;
-  font-weight: 400; color: var(--white);
-  margin-bottom: 16px; letter-spacing: 0;
-}
-.exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 9px; }
-.exp-bullets li {
-  font-size: 14px; color: var(--text2); line-height: 1.7;
-  padding-left: 18px; position: relative;
-}
-.exp-bullets li::before {
-  content: '–'; position: absolute; left: 0; color: var(--text3);
-}
-.exp-bullets li strong { color: var(--text); font-weight: 500; }
-
-/* ── PRODUCTS ──────────────────────────────────────── */
-#products { background: var(--bg2); }
-.prod-list { display: flex; flex-direction: column; gap: 24px; }
-
-.prod-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px; padding: 36px;
-  display: grid; grid-template-columns: 56px 1fr;
-  gap: 28px; align-items: start;
-  transition: border-color 0.25s, transform 0.25s var(--ease);
-  position: relative; overflow: hidden;
-}
-.prod-card::before {
-  content: ''; position: absolute;
-  top: 0; left: 0; right: 0; height: 1px;
-  opacity: 0; transition: opacity 0.25s;
-}
-.prod-card:hover { border-color: var(--border2); transform: translateY(-3px); }
-.prod-card:hover::before { opacity: 1; }
-
-.prod-card.mm::before  { background: linear-gradient(90deg, #C8955A, #D4B896); }
-.prod-card.op::before  { background: linear-gradient(90deg, #A0896C, #C8955A); }
-.prod-card.faq::before { background: linear-gradient(90deg, #8FA68A, #A8C5A0); }
-.prod-card.csr::before { background: linear-gradient(90deg, #7A9B75, #A8C5A0); }
-.prod-card.sashel::before { background: linear-gradient(90deg, #C8955A, #D4A870); }
-
-.prod-icon {
-  width: 52px; height: 52px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24px; flex-shrink: 0;
-}
-.mm  .prod-icon { background: rgba(200,149,90,0.1); border: 1px solid rgba(200,149,90,0.2); }
-.op  .prod-icon { background: rgba(160,137,108,0.12); border: 1px solid rgba(160,137,108,0.2); }
-.faq .prod-icon { background: rgba(143,166,138,0.1); border: 1px solid rgba(143,166,138,0.2); }
-.csr .prod-icon { background: rgba(122,155,117,0.1); border: 1px solid rgba(122,155,117,0.2); }
-.sashel .prod-icon { background: rgba(200,149,90,0.1); border: 1px solid rgba(200,149,90,0.2); }
-
-.prod-body {}
-.prod-top {
-  display: flex; align-items: flex-start;
-  justify-content: space-between; gap: 16px;
-  margin-bottom: 10px; flex-wrap: wrap;
-}
-.prod-name {
-  font-family: var(--fd); font-size: 22px;
-  font-weight: 400; color: var(--white); letter-spacing: 0;
-}
-.prod-badges { display: flex; gap: 6px; flex-wrap: wrap; }
-.badge {
-  font-family: var(--fm); font-size: 10px; letter-spacing: 0.05em;
-  padding: 3px 9px; border-radius: 100px; border: 1px solid;
-}
-.badge-live  { color: #A8C5A0;    border-color: rgba(168,197,160,0.3);   background: rgba(168,197,160,0.07); }
-.badge-pkg   { color: #C8955A;        border-color: rgba(200,149,90,0.3);   background: rgba(200,149,90,0.08); }
-.badge-agent { color: #D4A870;        border-color: rgba(212,168,112,0.3);  background: rgba(212,168,112,0.07); }
-.badge-cloud { color: #C8955A;        border-color: rgba(200,149,90,0.3);   background: rgba(200,149,90,0.07); }
-.badge-n8n   { color: #A0896C;        border-color: rgba(160,137,108,0.3);  background: rgba(160,137,108,0.06); }
-
-.prod-tagline { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-family: var(--fm); }
-.prod-desc { font-size: 14px; color: var(--text2); line-height: 1.8; margin-bottom: 16px; }
-.prod-desc strong { color: var(--text); font-weight: 500; }
-
-.prod-stack { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
-.stk {
-  font-family: var(--fm); font-size: 10px; letter-spacing: 0.03em;
-  padding: 3px 8px; border-radius: 5px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border); color: var(--text3);
-}
-
-.prod-links { display: flex; gap: 10px; }
-.pl {
-  font-family: var(--fm); font-size: 11px; letter-spacing: 0.04em;
-  padding: 8px 16px; border-radius: 6px;
-  display: inline-flex; align-items: center; gap: 6px;
-  transition: all 0.2s; text-decoration: none;
-}
-.pl-primary { background: linear-gradient(135deg, #C8955A, #D4A870); color: #0E0B08; }
-.pl-primary:hover { opacity: 0.85; transform: translateY(-1px); }
-.pl-outline { background: transparent; color: var(--text2); border: 1px solid var(--border2); }
-.pl-outline:hover { border-color: var(--amber); color: var(--amber); }
-
-/* ── AI ─────────────────────────────────────────────── */
-#ai-work { background: var(--bg); }
-.ai-layout {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
-}
-.ai-prose p {
-  font-size: 15px; color: var(--text2); line-height: 1.9; margin-bottom: 18px;
-}
-.ai-prose p strong { color: var(--text); font-weight: 500; }
-.ai-prose p:last-child { margin-bottom: 0; }
-
-.ai-items { display: flex; flex-direction: column; gap: 0; }
-.ai-row {
-  padding: 22px 0;
-  border-bottom: 1px solid var(--border);
-  display: flex; gap: 18px; align-items: flex-start;
-}
-.ai-row:first-child { border-top: 1px solid var(--border); }
-.ai-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--amber); margin-top: 7px; flex-shrink: 0;
-}
-.ai-row-title {
-  font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 3px;
-}
-.ai-row-desc { font-size: 13px; color: var(--text3); line-height: 1.6; }
-
-/* ── EDUCATION ─────────────────────────────────────── */
-#education { background: var(--bg2); }
-.edu-layout {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
-}
-.edu-block {
-  padding: 32px;
-  border: 1px solid var(--border); border-radius: 14px;
-  background: var(--surface);
-  transition: border-color 0.2s, transform 0.2s;
-}
-.edu-block:hover { border-color: var(--border2); transform: translateY(-3px); }
-.edu-icon { font-size: 32px; margin-bottom: 20px; }
-.edu-degree {
-  font-family: var(--fd); font-size: 20px;
-  font-weight: 400; color: var(--white);
-  margin-bottom: 4px; letter-spacing: 0;
-}
-.edu-where { font-family: var(--fm); font-size: 11px; color: var(--amber); margin-bottom: 14px; letter-spacing: 0.05em; }
-.edu-body { font-size: 13.5px; color: var(--text2); line-height: 1.8; }
-.edu-body strong { color: var(--text); font-weight: 500; }
-
-.edu-items { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
-.edu-items li { font-size: 13px; color: var(--text2); padding-left: 16px; position: relative; }
-.edu-items li::before { content: '✓'; position: absolute; left: 0; color: var(--amber2); font-size: 11px; }
-
-/* ── CERTS ─────────────────────────────────────────── */
-.cert-row {
-  display: flex; flex-wrap: wrap; gap: 12px; margin-top: 48px;
-}
-.cert-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px 20px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px; flex: 1; min-width: 200px;
-  transition: border-color 0.2s, transform 0.2s;
-}
-.cert-item:hover { border-color: var(--border2); transform: translateY(-2px); }
-.cert-item-icon { font-size: 20px; }
-.cert-item-body { display: flex; flex-direction: column; }
-.cert-item-name { font-size: 12.5px; font-weight: 500; color: var(--white); }
-.cert-item-meta { font-family: var(--fm); font-size: 10px; color: var(--text3); }
-
-/* ── CONTACT ───────────────────────────────────────── */
-#contact { background: var(--bg); }
-.contact-inner { max-width: 560px; }
-.contact-headline {
-  font-family: var(--fd);
-  font-size: clamp(44px, 6vw, 88px);
-  font-weight: 300; color: var(--white);
-  letter-spacing: -0.5px; line-height: 1.0; margin-bottom: 20px;
-}
-.contact-headline em { color: var(--amber); font-style: normal; }
-.contact-sub { font-size: 15px; color: var(--text2); line-height: 1.85; margin-bottom: 48px; }
-.contact-links { display: flex; flex-direction: column; gap: 0; }
-.contact-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 0; border-bottom: 1px solid var(--border);
-  transition: padding 0.2s;
-}
-.contact-row:first-child { border-top: 1px solid var(--border); }
-.contact-row:hover { padding-left: 6px; }
-.contact-row-left { display: flex; flex-direction: column; gap: 2px; }
-.contact-row-label { font-family: var(--fm); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); }
-.contact-row-val { font-size: 14px; color: var(--text2); transition: color 0.2s; }
-.contact-row:hover .contact-row-val { color: var(--white); }
-.contact-arrow { color: var(--text3); font-size: 18px; transition: transform 0.2s, color 0.2s; }
-.contact-row:hover .contact-arrow { transform: translateX(4px); color: var(--amber); }
-
-/* ── FOOTER ────────────────────────────────────────── */
-footer {
-  padding: 28px 56px;
-  border-top: 1px solid var(--border);
-  display: flex; justify-content: space-between; align-items: center;
-}
-.footer-left { font-family: var(--fd); font-size: 14px; color: var(--text3); font-weight: 600; }
-.footer-left em { color: var(--amber); font-style: normal; }
-.footer-right { font-family: var(--fm); font-size: 10px; color: var(--text3); letter-spacing: 0.06em; }
-
-/* ── MOBILE ────────────────────────────────────────── */
-@media (max-width: 860px) {
-  nav { padding: 16px 24px; }
-  .nav-links { display: none; }
-  #hero, section { padding: 90px 24px 72px; }
-  .about-layout, .ai-layout, .edu-layout { grid-template-columns: 1fr; gap: 40px; }
-  .exp-item { grid-template-columns: 1fr; gap: 8px; }
-  .prod-card { grid-template-columns: 1fr; }
-  .hero-foot { gap: 28px; }
-  footer { flex-direction: column; gap: 10px; text-align: center; padding: 24px; }
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}
+  section{padding:5rem 1.5rem}
+  .about-grid{grid-template-columns:1fr;gap:3rem}
+  .nums-grid{grid-template-columns:repeat(2,1fr)}
+  .skills-cols{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
-
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">remya<em>.</em>dev</div>
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#products">Products</a></li>
-    <li><a href="#ai-work">AI Work</a></li>
-    <li><a href="#education">Education</a></li>
-    <li><a href="#contact" class="nav-contact">Contact</a></li>
-  </ul>
+<nav id="nav">
+  <span class="nav-logo">Remya C</span>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Work</a>
+    <a href="#contact">Contact</a>
+  </div>
 </nav>
 
-<!-- HERO -->
 <section id="hero">
-  <div id="spotlight"></div>
-
-  <div class="hero-inner">
-    <div class="hero-mono">Trivandrum, India · Open to relocation</div>
-
-    <h1 class="hero-name">
-      Remya<br>
-      <span class="ghost">C.</span>
-    </h1>
-
-    <p class="hero-desc">
-      Salesforce developer with <strong>2.8+ years in production</strong>. Co-founder. AI product builder. I've shipped managed packages, deployed conversational AI on Cloud Run, and run a marketplace from zero to live — solo.
-    </p>
-
-    <div class="hero-actions">
-      <a href="#products" class="btn-solid">See the work →</a>
-      <a href="https://github.com/remyacode" target="_blank" class="btn-ghost">GitHub</a>
-      <a href="https://linkedin.com/in/remya-chandrasekhar-89337916a" target="_blank" class="btn-ghost">LinkedIn</a>
-    </div>
-
-    <div class="hero-foot">
-      <div class="hf-item">
-        <div class="hf-num">3<em>+</em></div>
-        <div class="hf-label">Years in Production</div>
-      </div>
-      <div class="hf-item">
-        <div class="hf-num">4</div>
-        <div class="hf-label">AI Products Shipped</div>
-      </div>
-      <div class="hf-item">
-        <div class="hf-num">3</div>
-        <div class="hf-label">Salesforce Certifications</div>
-      </div>
-      <div class="hf-item">
-        <div class="hf-num">M<em>+</em></div>
-        <div class="hf-label">Content Views</div>
-      </div>
-    </div>
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <p class="hero-eyebrow">AI Developer · Agent Builder · Engineer</p>
+    <h1 class="hero-h1">Systems that<br><em>think</em> and act</h1>
+    <p class="hero-sub">LLM pipelines, intelligent agents, and RAG systems — built from scratch and shipped to production.</p>
+    <a href="#projects" class="hero-cta">See the work</a>
   </div>
+  <div class="hero-scroll"><p>scroll</p><span></span></div>
 </section>
 
-<!-- ABOUT -->
 <section id="about">
-  <div class="s-label reveal">About</div>
-  <div class="about-layout">
-    <div class="about-text reveal">
-      <p class="about-pull">I build things that work — and I think hard about whether they're worth building.</p>
-      <p>I'm a <strong>certified Salesforce Platform Developer</strong> with 2.8+ years of production experience — building custom Order Management Systems, debugging Apex and API integration failures, and delivering end-to-end solutions for enterprise clients. I also have <strong>8–10 months of Shopify and Shopify Plus development</strong> at the same employer — theme customisation, Liquid templating, Shopify API integrations, and logistics automation for e-commerce clients.</p>
-      <p>In 2024–25, I <strong>co-founded Sashel LLP</strong> — a multi-vendor jewellery marketplace for Instagram brands. I identified the market gap, talked to 20+ vendors, defined the roadmap, set pricing, drove GTM, and built the entire platform alone. That experience gave me something engineering alone doesn't: the instinct to ask "should we build this?" before "how?"</p>
-      <p>I've independently designed and deployed <strong>four AI-integrated products</strong> — each solving a real problem, each live. I also run SmartBot Club, an AI education brand that's reached multi-million organic views.</p>
-    </div>
-    <div class="about-aside reveal">
-      <div class="aside-row">
-        <div class="aside-key">Based in</div>
-        <div class="aside-val">Trivandrum, Kerala, India</div>
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <p class="sec-label">About</p>
+        <h2 class="sec-title">3 years building things that work in production</h2>
+        <p class="sec-body">I design and ship AI systems — autonomous agents, RAG pipelines with real evaluation, MCP integrations, local LLM tools. Not prototypes. Production code with error handling, fallback logic, and eval harnesses.</p>
+        <p class="sec-body" style="margin-top:1rem">Top 100 at Google Patchamomma 2026 for RoadShield. Participating in Google AI Builder Cup 2026. Associate Developer at Tryzens Global across Salesforce and Shopify.</p>
+        <div class="about-tags">
+          <span class="tag">Google ADK</span><span class="tag">LangChain</span><span class="tag">Gemini</span>
+          <span class="tag">Claude API</span><span class="tag">Llama 3.2</span><span class="tag">Ollama</span>
+          <span class="tag">RAG</span><span class="tag">FastAPI</span><span class="tag">GCP</span>
+          <span class="tag">MCP</span><span class="tag">Agentforce</span><span class="tag">Shopify</span>
+        </div>
       </div>
-      <div class="aside-row">
-        <div class="aside-key">Currently</div>
-        <div class="aside-val"><strong>Associate Salesforce Developer</strong> at Tryzens Global</div>
-      </div>
-      <div class="aside-row">
-        <div class="aside-key">Education</div>
-        <div class="aside-val">B.Tech CSE — College of Engineering Chengannur · CGPA 8.12</div>
-      </div>
-      <div class="aside-row">
-        <div class="aside-key">Certifications</div>
-        <div class="aside-val">Salesforce PD1 · Agentforce Specialist · AI Associate · Shopify Fundamentals</div>
-      </div>
-      <div class="aside-row">
-        <div class="aside-key">GitHub</div>
-        <div class="aside-val"><a href="https://github.com/remyacode" style="color:var(--amber)">github.com/remyacode</a></div>
-      </div>
+      <div id="about-canvas-wrap"><canvas id="about-canvas"></canvas></div>
     </div>
   </div>
 </section>
 
-<!-- EXPERIENCE -->
 <section id="experience">
-  <div class="s-label reveal">Experience</div>
-  <h2 class="s-title reveal">Where I've Shipped</h2>
+  <div class="container">
+    <p class="sec-label">Experience</p>
+    <h2 class="sec-title">Where I have worked</h2>
+    <div class="exp-list">
 
-  <div class="exp-list">
-
-    <div class="exp-item reveal">
-      <div class="exp-left">
-        <div class="exp-period">Oct 2023 – Present</div>
-        <div class="exp-company">
-          <span class="exp-co-name">Tryzens Global</span><br>
-          Trivandrum, India
+      <div class="exp-item">
+        <div class="exp-header">
+          <div>
+            <h3 class="exp-role">Associate Developer</h3>
+            <p class="exp-org">Tryzens Global · Trivandrum, India</p>
+          </div>
+          <span class="exp-date">Oct 2023 – Present</span>
+        </div>
+        <div class="exp-tracks">
+          <div class="exp-track">
+            <p class="exp-track-label">AI Engineering</p>
+            <p class="exp-track-body">Independently built and deployed OrgPulse, a production Agentforce conversational agent with full agent intelligence design — prompts, tool calls, reasoning flows, and fallback architecture. Diagnosed a live LLM hallucination bug at the inference layer via anonymous debug. Built MeetingMind, a Claude AI API integration packaged as a 2GP managed package published on AppExchange, reducing sales debrief time by over 90%.</p>
+          </div>
+          <div class="exp-track">
+            <p class="exp-track-label">Salesforce Development</p>
+            <p class="exp-track-body">Primary technical owner of a custom high-volume Order Management System and Return Orders processing pipeline for a major enterprise publishing client — zero production outages over 18+ months, 100+ complex issues resolved with zero unresolved P1 incidents, and approximately 60% reduction in client manual effort. Worked across Sales Cloud, Service Cloud, Apex, LWC, and REST/SOAP API integrations.</p>
+          </div>
+          <div class="exp-track">
+            <p class="exp-track-label">Shopify Development</p>
+            <p class="exp-track-body">Developed and maintained a multi-brand Shopify theme codebase for Footpatrol and Size using Shopify Liquid, React, TypeScript, and Tailwind CSS across multi-store, multi-environment production setups. Integrated Bloomreach product discovery including predictive search, collection widgets, and React-based auto-suggest components. Authored technical documentation for 20+ theme sections.</p>
+          </div>
         </div>
       </div>
-      <div class="exp-right">
-        <div class="exp-role">Associate Salesforce Developer</div>
-        <ul class="exp-bullets">
-          <li>Primary technical owner of a custom <strong>OMS processing thousands of orders monthly</strong> for a major enterprise publishing client — zero production outages within Salesforce Governor Limits.</li>
-          <li>Solely delivered an end-to-end Return Orders pipeline — multi-step LWC Wizards, Screen Flows, and reusable base component frameworks; reduced manual handling effort by <strong>~60%</strong>.</li>
-          <li>Debugged complex Apex, Flow, and REST/SOAP integration failures — root cause analysis on Governor Limit violations, Batch Job failures, and async callout errors.</li>
-          <li>Proactively identified and shipped an LWC-based invoicing workflow fix independently — beyond assigned scope.</li>
-          <li>Full-stack CRM exposure: Sales Cloud, Service Cloud, case management, Email-to-Case, Lead & Opportunity handling.</li>
-        </ul>
-      </div>
-    </div>
 
-    <div class="exp-item reveal">
-      <div class="exp-left">
-        <div class="exp-period">~8–10 months</div>
-        <div class="exp-company">
-          <span class="exp-co-name">Tryzens Global</span><br>
-          Trivandrum, India
+      <div class="exp-item">
+        <div class="exp-header">
+          <div>
+            <h3 class="exp-role">Co-Founder and CTO</h3>
+            <p class="exp-org">Sashel LLP · Remote</p>
+          </div>
+          <span class="exp-date">Jun 2025 – Dec 2025</span>
         </div>
+        <p class="exp-track-body" style="margin-top:1rem">Identified an unserved market of 10,000+ Instagram-native jewellery brands in India with no affordable multi-vendor storefront. Conceptualised, validated, and launched Sashel.in from zero to live as sole technical architect — frontend in TypeScript, REST API integrations with 3+ logistics and payment providers, and Activepieces automation pipelines reducing manual order processing by approximately 70%. Conducted 20+ vendor and buyer discovery interviews, shipping 3 iterative product versions in under 4 months.</p>
       </div>
-      <div class="exp-right">
-        <div class="exp-role">Shopify & E-Commerce Developer</div>
-        <ul class="exp-bullets">
-          <li>Built and delivered <strong>Shopify and Shopify Plus</strong> e-commerce stores — theme customisation, Liquid templating, custom section development, and Metafields.</li>
-          <li>Integrated third-party logistics, payment, and inventory providers using <strong>Shopify REST API and Webhooks</strong>, automating order operations.</li>
-          <li>Delivered responsive, performant storefront implementations with modern JavaScript and CSS alongside Liquid.</li>
-          <li>Shopify Plus: multi-store management, checkout customisation, and enterprise-scale store configuration.</li>
-        </ul>
-      </div>
-    </div>
 
-    <div class="exp-item reveal">
-      <div class="exp-left">
-        <div class="exp-period">2024 – 2025<br>5–6 months</div>
-        <div class="exp-company">
-          <span class="exp-co-name">Sashel LLP</span><br>
-          Remote
+      <div class="exp-item">
+        <div class="exp-header">
+          <div>
+            <h3 class="exp-role">AI Content Strategist</h3>
+            <p class="exp-org">The SmartBot Club · Remote</p>
+          </div>
+          <span class="exp-date">Dec 2024 – Present</span>
         </div>
+        <p class="exp-track-body" style="margin-top:1rem">Built an AI education brand from zero to 50,000+ followers and multi-million organic views by identifying an underserved non-technical audience and mapping content gaps in the AI education space. Individual reels reaching up to 24 million views. Content covers LLM engineering, agentic AI, Shopify development, and AI product development.</p>
       </div>
-      <div class="exp-right">
-        <div class="exp-role">Co-Founder & CTO</div>
-        <ul class="exp-bullets">
-          <li>Identified an unserved market of <strong>10,000+ Instagram jewellery brands</strong> with no affordable multi-vendor storefront — launched Sashel.in from zero.</li>
-          <li>Conducted <strong>20+ direct vendor and buyer interviews</strong>; shipped 3 iterative product versions in 4 months incorporating feedback at each cycle.</li>
-          <li>Owned full product lifecycle: ICP definition, value proposition, outreach playbook, pricing model, commission structure, logistics partnerships.</li>
-          <li>Built Activepieces pipelines reducing manual order processing by <strong>~70%</strong>, syncing Shopify with logistics and payment providers via REST API.</li>
-        </ul>
-      </div>
-    </div>
 
-    <div class="exp-item reveal">
-      <div class="exp-left">
-        <div class="exp-period">Dec 2024 – Present</div>
-        <div class="exp-company">
-          <span class="exp-co-name">The SmartBot Club</span><br>
-          Remote
-        </div>
-      </div>
-      <div class="exp-right">
-        <div class="exp-role">AI Content Strategist</div>
-        <ul class="exp-bullets">
-          <li>Grew an AI education brand to <strong>multi-million organic views</strong> by identifying underserved non-technical audiences and shipping content in high-retention formats.</li>
-          <li>Distilling complex AI and LLM concepts into accessible content — developing deep technical communication skills.</li>
-        </ul>
-      </div>
     </div>
-
   </div>
 </section>
 
-<!-- PRODUCTS -->
-<section id="products">
-  <div class="s-label reveal">Products Built</div>
-  <h2 class="s-title reveal">Shipped. Deployed. Real.</h2>
-  <p class="s-body reveal">Production-grade tools that solve real problems — each owned end-to-end from problem identification through deployment.</p>
-
-  <div class="prod-list">
-
-    <div class="prod-card mm reveal">
-      <div class="prod-icon">🧠</div>
-      <div class="prod-body">
-        <div class="prod-top">
-          <div class="prod-name">MeetingMind</div>
-          <div class="prod-badges">
-            <span class="badge badge-live">✓ Live</span>
-            <span class="badge badge-pkg">2GP Managed Package</span>
-          </div>
-        </div>
-        <div class="prod-tagline">AI Sales Debrief Generator for Salesforce</div>
-        <p class="prod-desc">Sales reps spend <strong>15–20 minutes per call</strong> writing manual debriefs, causing CRM gaps and delayed follow-ups. One button click on the Opportunity record → fully structured debrief in <strong>under 10 seconds</strong>: key points, action items, next steps, call sentiment, and manager summary — auto-saved as a linked record. Built across every Salesforce platform layer. No equivalent exists on AppExchange.</p>
-        <div class="prod-stack">
-          <span class="stk">Apex</span><span class="stk">LWC</span><span class="stk">Claude AI API</span>
-          <span class="stk">2GP Package</span><span class="stk">Custom Metadata</span>
-          <span class="stk">Named Credentials</span><span class="stk">GitHub Actions CI/CD</span>
-        </div>
-        <div class="prod-links">
-          <a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04tdM000000SN89QAG" target="_blank" class="pl pl-primary">↓ Install Free</a>
-          <a href="https://github.com/remyacode/meetingmind-salesforce" target="_blank" class="pl pl-outline">⌥ GitHub</a>
-        </div>
+<section id="projects">
+  <div class="container">
+    <p class="sec-label">Work</p>
+    <h2 class="sec-title">Shipped projects</h2>
+    <div class="proj-grid">
+      <div class="proj-card">
+        <p class="proj-award">🏆 Top 100 · Google Patchamomma 2026</p>
+        <h3 class="proj-name">RoadShield</h3>
+        <p class="proj-desc">Predictive road safety platform. Multi-agent orchestration on Google ADK with Vertex AI Gemini, BigQuery GIS spatial analysis, and CesiumJS 3D hazard visualisation. Deployed on Cloud Run.</p>
+        <div class="proj-stack"><span>Google ADK</span><span>Vertex AI</span><span>BigQuery</span><span>CesiumJS</span><span>FastAPI</span></div>
+        <a href="https://github.com/remyacode/roadshield" class="proj-link" target="_blank">↗</a>
+      </div>
+      <div class="proj-card">
+        <h3 class="proj-name">LlamaProspect</h3>
+        <p class="proj-desc">Fully local AI prospecting agent. Searches real businesses, scrapes websites, feeds clean text into Llama 3.2 via Ollama to generate personalised cold email pitches. Zero cloud cost. Natural language prompt mode. Approval UI.</p>
+        <div class="proj-stack"><span>Python</span><span>Flask</span><span>Llama 3.2</span><span>Ollama</span><span>Serper API</span></div>
+        <a href="https://github.com/remyacode" class="proj-link" target="_blank">↗</a>
+      </div>
+      <div class="proj-card">
+        <h3 class="proj-name">RAG System + Eval Harness</h3>
+        <p class="proj-desc">RAG from scratch — chunking, Sentence Transformers embeddings, cosine similarity retrieval, LLM generation grounded in retrieved context. FastAPI web app with LLM-as-judge eval harness and hallucination detection benchmarks.</p>
+        <div class="proj-stack"><span>Python</span><span>LangChain</span><span>FastAPI</span><span>Sentence Transformers</span></div>
+        <a href="https://github.com/remyacode/ai-engineer-journey" class="proj-link" target="_blank">↗</a>
+      </div>
+      <div class="proj-card">
+        <h3 class="proj-name">Autonomous Agent + MCP</h3>
+        <p class="proj-desc">AI agent with autonomous tool use — receives a goal, decides which tools to call, observes results, continues until complete. No human guidance between steps. Custom MCP server exposing business analysis tools via standard AI protocol.</p>
+        <div class="proj-stack"><span>Python</span><span>Google ADK</span><span>LangChain</span><span>MCP Protocol</span></div>
+      </div>
+      <div class="proj-card">
+        <h3 class="proj-name">MeetingMind</h3>
+        <p class="proj-desc">Claude AI API integration in Salesforce. Generates structured call debriefs from raw notes in under 10 seconds. Published as a 2GP managed package on AppExchange. 90% reduction in debrief time. No equivalent on the platform.</p>
+        <div class="proj-stack"><span>Claude API</span><span>Apex</span><span>LWC</span><span>AppExchange</span></div>
+        <a href="https://github.com/remyacode/meetingmind-salesforce" class="proj-link" target="_blank">↗</a>
+      </div>
+      <div class="proj-card">
+        <h3 class="proj-name">Student FAQ Agent</h3>
+        <p class="proj-desc">Cloud-based conversational AI on GCP. Dialogflow CX with FastAPI webhook on Cloud Run, Gemini API fallback for out-of-scope queries. Intent classification, entity extraction, session management. Built end to end in under 2 weeks.</p>
+        <div class="proj-stack"><span>Dialogflow CX</span><span>FastAPI</span><span>Cloud Run</span><span>Gemini</span></div>
+        <a href="https://github.com/remyacode/student-faq-chatbot" class="proj-link" target="_blank">↗</a>
       </div>
     </div>
-
-    <div class="prod-card op reveal">
-      <div class="prod-icon">🔍</div>
-      <div class="prod-body">
-        <div class="prod-top">
-          <div class="prod-name">OrgPulse</div>
-          <div class="prod-badges">
-            <span class="badge badge-live">✓ Live</span>
-            <span class="badge badge-agent">Agentforce Agent</span>
-          </div>
-        </div>
-        <div class="prod-tagline">Conversational Org Health Monitor</div>
-        <p class="prod-desc">Salesforce admins spend hours weekly on manual org audits. OrgPulse is an Agentforce-powered conversational agent that surfaces <strong>Governor Limit usage, inactive Flows, and low-coverage Apex classes</strong> on demand in a single interaction — turning hours of reactive troubleshooting into seconds of proactive monitoring.</p>
-        <div class="prod-stack">
-          <span class="stk">Agentforce</span><span class="stk">Apex</span>
-          <span class="stk">REST API</span><span class="stk">Claude AI</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="prod-card faq reveal">
-      <div class="prod-icon">💬</div>
-      <div class="prod-body">
-        <div class="prod-top">
-          <div class="prod-name">Student FAQ Chatbot</div>
-          <div class="prod-badges">
-            <span class="badge badge-live">✓ Deployed</span>
-            <span class="badge badge-cloud">Cloud Run</span>
-          </div>
-        </div>
-        <div class="prod-tagline">Conversational AI on Google Cloud</div>
-        <p class="prod-desc">A production-deployed conversational AI chatbot answering student FAQs. Dialogflow CX handles multi-turn intent management, a FastAPI webhook runs on Google Cloud Run, and <strong>Gemini 2.5 Flash</strong> generates dynamic responses for unstructured queries. Deployed via Cloud Build.</p>
-        <div class="prod-stack">
-          <span class="stk">Dialogflow CX</span><span class="stk">FastAPI</span>
-          <span class="stk">Gemini 2.5 Flash</span><span class="stk">Cloud Run</span><span class="stk">GCP</span>
-        </div>
-        <div class="prod-links">
-          <a href="https://github.com/remyacode/student-faq-chatbot" target="_blank" class="pl pl-outline">⌥ GitHub</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="prod-card csr reveal">
-      <div class="prod-icon">🤝</div>
-      <div class="prod-body">
-        <div class="prod-top">
-          <div class="prod-name">CSR Volunteering Platform</div>
-          <div class="prod-badges">
-            <span class="badge badge-live">✓ Shipped</span>
-            <span class="badge badge-n8n">n8n Integration</span>
-          </div>
-        </div>
-        <div class="prod-tagline">Internal Tool · Salesforce + AI Matching</div>
-        <p class="prod-desc">Cross-platform volunteer management app with <strong>bi-directional Salesforce sync via n8n</strong>. Used Claude AI API for automated skill-to-opportunity matching — cutting manual coordinator effort by an estimated <strong>~50% per recruitment cycle</strong>.</p>
-        <div class="prod-stack">
-          <span class="stk">Salesforce</span><span class="stk">n8n</span>
-          <span class="stk">Claude AI API</span><span class="stk">Flutterflow</span>
-        </div>
-      </div>
-    </div>
-
   </div>
 </section>
 
-<!-- AI WORK -->
-<section id="ai-work">
-  <div class="s-label reveal">AI & Automation</div>
-  <h2 class="s-title reveal">What I've Actually Built</h2>
-
-  <div class="ai-layout">
-    <div class="ai-prose reveal">
-      <p>My AI experience comes from <strong>shipping products that use AI</strong>, not studying it. MeetingMind integrates Claude AI API via Apex callouts and returns structured JSON parsed into Salesforce records. OrgPulse is a live Agentforce conversational agent. The Student FAQ Chatbot is deployed on Cloud Run using Gemini 2.5 Flash.</p>
-      <p>The honest picture: I can <strong>integrate and deploy AI systems today</strong>. I'm actively building the depth to design and fine-tune them — working through PyTorch basics, transformer concepts, and agentic patterns on a structured roadmap, committing everything to public GitHub repos as I go.</p>
-      <p>I also run <strong>SmartBot Club</strong> — an AI education brand that has crossed multi-million organic views by translating complex AI concepts into content for non-technical audiences.</p>
+<section id="numbers">
+  <div class="container">
+    <p class="sec-label">Impact</p>
+    <h2 class="sec-title">In numbers</h2>
+    <div class="nums-grid">
+      <div class="stat">
+        <div class="stat-n"><span class="counter-val">0</span><span class="ac">+</span></div>
+        <p class="stat-l">Production issues resolved with zero unresolved P1 incidents over 3 years</p>
+      </div>
+      <div class="stat">
+        <div class="stat-n"><span class="counter-val">0</span><span class="ac">%</span></div>
+        <p class="stat-l">Reduction in sales debrief time — 20 minutes down to under 10 seconds</p>
+      </div>
+      <div class="stat">
+        <div class="stat-n"><span class="counter-val">0</span><span class="ac">K+</span></div>
+        <p class="stat-l">Followers on The SmartBot Club AI education brand</p>
+      </div>
+      <div class="stat">
+        <div class="stat-n"><span class="ac">Top </span><span class="counter-val">0</span></div>
+        <p class="stat-l">Google Patchamomma 2026 — RoadShield selected from the full cohort</p>
+      </div>
     </div>
-    <div class="ai-items reveal">
-      <div class="ai-row">
-        <div class="ai-dot"></div>
-        <div>
-          <div class="ai-row-title">Claude AI API — Production</div>
-          <div class="ai-row-desc">Apex HTTP callouts in MeetingMind. Skill-to-opportunity matching in the CSR Platform. Structured JSON parsing and error handling in both.</div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="container">
+    <p class="sec-label">Stack</p>
+    <h2 class="sec-title">What I build with</h2>
+    <div class="skills-cols">
+      <div>
+        <div class="sg"><p class="sg-name">AI Agents and Frameworks</p>
+          <ul class="sg-list"><li>Google ADK</li><li>LangChain</li><li>Agentforce (Salesforce)</li><li>Dialogflow CX</li><li>MCP Protocol</li><li>Autonomous agent design</li></ul>
+        </div>
+        <div class="sg"><p class="sg-name">LLM and Generative AI</p>
+          <ul class="sg-list"><li>Gemini API</li><li>Claude AI API</li><li>Llama 3.2 + Ollama</li><li>OpenRouter</li><li>Prompt engineering</li><li>RAG + eval harnesses</li></ul>
         </div>
       </div>
-      <div class="ai-row">
-        <div class="ai-dot"></div>
-        <div>
-          <div class="ai-row-title">Agentforce — Live Agent</div>
-          <div class="ai-row-desc">Built OrgPulse end-to-end: agent configuration, Apex action layer, REST integration for org health data retrieval.</div>
+      <div>
+        <div class="sg"><p class="sg-name">Backend and Cloud</p>
+          <ul class="sg-list"><li>Python, FastAPI, Flask</li><li>Google Cloud Platform</li><li>Cloud Run, Vertex AI, BigQuery</li><li>REST API, OAuth 2.0</li><li>GitHub Actions CI</li></ul>
         </div>
-      </div>
-      <div class="ai-row">
-        <div class="ai-dot"></div>
-        <div>
-          <div class="ai-row-title">Gemini 2.5 Flash — Cloud Run</div>
-          <div class="ai-row-desc">Student FAQ Chatbot: FastAPI webhook backend, Dialogflow CX intent routing, Gemini for dynamic response generation. Live public endpoint.</div>
-        </div>
-      </div>
-      <div class="ai-row">
-        <div class="ai-dot"></div>
-        <div>
-          <div class="ai-row-title">Prompt Engineering — Production</div>
-          <div class="ai-row-desc">Structured prompts for consistent JSON output across MeetingMind (sentiment, action items, summaries) and CSR matching. Iterated on output quality in production.</div>
-        </div>
-      </div>
-      <div class="ai-row">
-        <div class="ai-dot" style="background:var(--text3);opacity:0.5"></div>
-        <div>
-          <div class="ai-row-title" style="color:var(--text2)">ML Engineering — Active Learning</div>
-          <div class="ai-row-desc">PyTorch fundamentals, LangChain/LangGraph patterns. Learning in public — GitHub repos, not finished projects.</div>
+        <div class="sg"><p class="sg-name">Enterprise Platforms</p>
+          <ul class="sg-list"><li>Salesforce — Apex, LWC, 2GP Packages</li><li>Shopify — Liquid, React, Tailwind, Bloomreach</li><li>JavaScript, TypeScript</li></ul>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- EDUCATION -->
-<section id="education">
-  <div class="s-label reveal">Education & Credentials</div>
-  <h2 class="s-title reveal">Foundation</h2>
-
-  <div class="edu-layout">
-    <div class="edu-block reveal">
-      <div class="edu-icon">🎓</div>
-      <div class="edu-degree">B.Tech in Computer Science & Engineering</div>
-      <div class="edu-where">College of Engineering Chengannur · 2018–2022</div>
-      <div class="edu-body">
-        Graduated with CGPA <strong>8.12 / 10</strong>. Strong foundation in algorithms, data structures, system architecture, database design, and computer networks.
-        <ul class="edu-items">
-          <li>Training & Placement Cell Coordinator — 100+ students, 15+ companies over 2 years</li>
-          <li>School Leader at Ebenezer International Residential School — elected to represent 800+ students (2017–18)</li>
-        </ul>
-      </div>
-    </div>
-    <div class="edu-block reveal">
-      <div class="edu-icon">🏆</div>
-      <div class="edu-degree">Certifications</div>
-      <div class="edu-where">Salesforce · Shopify · Verified</div>
-      <div class="cert-row">
-        <div class="cert-item">
-          <span class="cert-item-icon">☁️</span>
-          <div class="cert-item-body">
-            <div class="cert-item-name">Platform Developer I</div>
-            <div class="cert-item-meta">Salesforce · Nov 2025</div>
-          </div>
-        </div>
-        <div class="cert-item">
-          <span class="cert-item-icon">⚡</span>
-          <div class="cert-item-body">
-            <div class="cert-item-name">Agentforce Specialist</div>
-            <div class="cert-item-meta">Salesforce · Jan 2026</div>
-          </div>
-        </div>
-        <div class="cert-item">
-          <span class="cert-item-icon">🧠</span>
-          <div class="cert-item-body">
-            <div class="cert-item-name">AI Associate</div>
-            <div class="cert-item-meta">Salesforce · Dec 2024</div>
-          </div>
-        </div>
-        <div class="cert-item">
-          <span class="cert-item-icon">🛍️</span>
-          <div class="cert-item-body">
-            <div class="cert-item-name">Shopify Fundamentals</div>
-            <div class="cert-item-meta">Shopify · Sep 2025</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
 <section id="contact">
-  <div class="contact-inner">
-    <div class="s-label reveal">Contact</div>
-    <h2 class="contact-headline reveal">Let's build<br>something <em>real.</em></h2>
-    <p class="contact-sub reveal">Open to Salesforce roles, AI product conversations, APM positions, and technical collaborations. If something here resonated — reach out.</p>
-    <div class="contact-links reveal">
-      <a href="mailto:remyachandrasekhar710@gmail.com" class="contact-row">
-        <div class="contact-row-left">
-          <div class="contact-row-label">Email</div>
-          <div class="contact-row-val">remyachandrasekhar710@gmail.com</div>
-        </div>
-        <span class="contact-arrow">→</span>
-      </a>
-      <a href="https://linkedin.com/in/remya-chandrasekhar-89337916a" target="_blank" class="contact-row">
-        <div class="contact-row-left">
-          <div class="contact-row-label">LinkedIn</div>
-          <div class="contact-row-val">linkedin.com/in/remya-chandrasekhar-89337916a</div>
-        </div>
-        <span class="contact-arrow">→</span>
-      </a>
-      <a href="https://github.com/remyacode" target="_blank" class="contact-row">
-        <div class="contact-row-left">
-          <div class="contact-row-label">GitHub</div>
-          <div class="contact-row-val">github.com/remyacode</div>
-        </div>
-        <span class="contact-arrow">→</span>
-      </a>
-      <a href="https://remyacode.github.io/Professional/" target="_blank" class="contact-row">
-        <div class="contact-row-left">
-          <div class="contact-row-label">Portfolio</div>
-          <div class="contact-row-val">remyacode.github.io/Professional/</div>
-        </div>
-        <span class="contact-arrow">→</span>
-      </a>
+  <div class="container">
+    <h2 class="ct-title">Open to the right<br>AI engineering role</h2>
+    <p class="ct-sub">AI Engineer, Applied AI, FDE, or LLM Developer positions.</p>
+    <div class="ct-links">
+      <a href="mailto:remyachandrasekhar710@gmail.com" class="ct-link p">Send an email</a>
+      <a href="https://linkedin.com/in/remya-chandrasekhar-89337916a" class="ct-link s" target="_blank">LinkedIn</a>
+      <a href="https://github.com/remyacode" class="ct-link s" target="_blank">GitHub</a>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-left">remya<em>.</em>dev</div>
-  <div class="footer-right">© 2025 · Remya C</div>
-</footer>
+<footer>© 2026 Remya C · AI Developer · Trivandrum, India</footer>
 
 <script>
-/* Cursor spotlight */
-const spotlight = document.getElementById('spotlight');
-document.getElementById('hero').addEventListener('mousemove', (e) => {
-  spotlight.style.left = e.clientX + 'px';
-  spotlight.style.top  = e.clientY + 'px';
-});
+// ── HERO CANVAS: pure Canvas 2D neural network ────────────────────────
+(function(){
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, nodes=[], edges=[], mx=0.5, my=0.5;
+  const NODE_COUNT = 90;
+  const ACCENT = '#e8c547';
+  const EDGE_COLOR = 'rgba(232,197,71,';
 
-/* Scroll reveal */
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      const delay = parseInt(e.target.dataset.delay || 0);
-      setTimeout(() => e.target.classList.add('visible'), delay);
-      io.unobserve(e.target);
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  document.addEventListener('mousemove', e=>{ mx=e.clientX/window.innerWidth; my=e.clientY/window.innerHeight; });
+
+  // distribute nodes on sphere surface, projected to 2D
+  for(let i=0;i<NODE_COUNT;i++){
+    const phi = Math.acos(1-2*(i+.5)/NODE_COUNT);
+    const theta = Math.PI*(1+Math.sqrt(5))*i;
+    const r = 0.32 + Math.random()*0.06;
+    nodes.push({
+      bx: 0.5 + r*Math.sin(phi)*Math.cos(theta),
+      by: 0.5 + r*Math.sin(phi)*Math.sin(theta)*0.55,
+      bz: r*Math.cos(phi),
+      x:0,y:0,
+      pulse: Math.random()*Math.PI*2,
+      speed: 0.006+Math.random()*0.006,
+      size: 1.5+Math.random()*2,
+    });
+  }
+
+  // precompute edges
+  for(let i=0;i<NODE_COUNT;i++) for(let j=i+1;j<NODE_COUNT;j++){
+    const dx=nodes[i].bx-nodes[j].bx, dy=nodes[i].by-nodes[j].by;
+    const d=Math.sqrt(dx*dx+dy*dy);
+    if(d<0.13) edges.push([i,j,d]);
+  }
+
+  // background stars
+  const stars=[];
+  for(let i=0;i<300;i++) stars.push({x:Math.random(),y:Math.random(),r:Math.random()*0.8,o:0.1+Math.random()*0.3});
+
+  let t=0;
+  function draw(){
+    requestAnimationFrame(draw);
+    t+=0.008;
+    ctx.clearRect(0,0,W,H);
+
+    // stars
+    stars.forEach(s=>{
+      ctx.beginPath();
+      ctx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(58,48,32,${s.o})`;
+      ctx.fill();
+    });
+
+    // parallax offset
+    const ox=(mx-0.5)*60, oy=(my-0.5)*40;
+
+    // update node positions
+    nodes.forEach(n=>{
+      n.pulse+=n.speed;
+      n.x=(n.bx+(Math.sin(t+n.pulse)*0.012))*W + ox;
+      n.y=(n.by+(Math.cos(t*0.7+n.pulse)*0.01))*H + oy;
+    });
+
+    // edges
+    edges.forEach(([i,j,d])=>{
+      const op=Math.max(0,(0.13-d)/0.13)*0.18;
+      ctx.beginPath();
+      ctx.moveTo(nodes[i].x,nodes[i].y);
+      ctx.lineTo(nodes[j].x,nodes[j].y);
+      ctx.strokeStyle=EDGE_COLOR+op+')';
+      ctx.lineWidth=0.5;
+      ctx.stroke();
+    });
+
+    // nodes
+    nodes.forEach(n=>{
+      const glow=0.5+0.5*Math.sin(n.pulse);
+      ctx.beginPath();
+      ctx.arc(n.x,n.y,n.size,0,Math.PI*2);
+      ctx.fillStyle=`rgba(232,197,71,${0.4+glow*0.4})`;
+      ctx.fill();
+    });
+  }
+  draw();
+})();
+
+// ── ABOUT CANVAS: pure Canvas 2D torus wireframe ─────────────────────
+(function(){
+  const wrap = document.getElementById('about-canvas-wrap');
+  const canvas = document.getElementById('about-canvas');
+  const ctx = canvas.getContext('2d');
+  let W,H,mx=0,my=0;
+  function resize(){
+    W=canvas.width=wrap.offsetWidth;
+    H=canvas.height=wrap.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize',resize);
+  document.addEventListener('mousemove',e=>{mx=(e.clientX/window.innerWidth-.5);my=(e.clientY/window.innerHeight-.5);});
+
+  const R=0.32, r=0.09; // major/minor radius (fraction of min dim)
+  const segs=28, rings=18;
+
+  function project(x,y,z,cx,cy){
+    const fov=2.2, zOffset=2;
+    const s=fov/(fov+(z+zOffset));
+    return [cx+x*s*Math.min(W,H), cy+y*s*Math.min(W,H)];
+  }
+
+  let t=0;
+  function draw(){
+    requestAnimationFrame(draw);
+    t+=0.008;
+    ctx.clearRect(0,0,W,H);
+    const cx=W/2, cy=H/2;
+    const rx=t*0.5+my*0.8, ry=t*0.3+mx*0.8;
+    const cosx=Math.cos(rx),sinx=Math.sin(rx);
+    const cosy=Math.cos(ry),siny=Math.sin(ry);
+
+    // generate torus points
+    const pts=[];
+    for(let i=0;i<=segs;i++){
+      const u=(i/segs)*Math.PI*2;
+      pts.push([]);
+      for(let j=0;j<=rings;j++){
+        const v=(j/rings)*Math.PI*2;
+        let x=(R+r*Math.cos(v))*Math.cos(u);
+        let y=(R+r*Math.cos(v))*Math.sin(u);
+        let z=r*Math.sin(v);
+        // rotate X
+        const y1=y*cosx-z*sinx, z1=y*sinx+z*cosx;
+        // rotate Y
+        const x1=x*cosy+z1*siny, z2=-x*siny+z1*cosy;
+        pts[i].push(project(x1,y1,z2,cx,cy));
+      }
     }
-  });
-}, { threshold: 0.07, rootMargin: '0px 0px -28px 0px' });
 
-document.querySelectorAll('.reveal').forEach((el, i) => {
-  el.dataset.delay = (i % 4) * 80;
-  io.observe(el);
+    ctx.strokeStyle='rgba(232,197,71,0.35)';
+    ctx.lineWidth=0.7;
+    for(let i=0;i<segs;i++){
+      for(let j=0;j<rings;j++){
+        ctx.beginPath();
+        ctx.moveTo(pts[i][j][0],pts[i][j][1]);
+        ctx.lineTo(pts[i+1][j][0],pts[i+1][j][1]);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(pts[i][j][0],pts[i][j][1]);
+        ctx.lineTo(pts[i][j+1][0],pts[i][j+1][1]);
+        ctx.stroke();
+      }
+    }
+  }
+  draw();
+})();
+
+// ── GSAP ANIMATIONS ───────────────────────────────────────────────────
+gsap.registerPlugin(ScrollTrigger);
+
+// nav scroll
+ScrollTrigger.create({
+  start:'top -60',
+  onUpdate:s=>document.getElementById('nav').classList.toggle('scrolled',s.progress>0)
 });
 
-/* Active nav */
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll', () => {
-  let cur = '';
-  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) cur = s.id; });
-  navLinks.forEach(a => {
-    a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--white)' : '';
-  });
-}, { passive: true });
+// hero entrance
+gsap.set(['.hero-eyebrow','.hero-h1','.hero-sub','.hero-cta','.hero-scroll'], {opacity:0,y:30});
+gsap.set(['.nav-logo','.nav-links a'], {opacity:0});
+gsap.timeline({delay:.3})
+  .to('.nav-logo',{opacity:1,duration:.5})
+  .to('.nav-links a',{opacity:1,stagger:.07,duration:.4},'-=.2')
+  .to('.hero-eyebrow',{opacity:1,y:0,duration:.6},'-=.2')
+  .to('.hero-h1',{opacity:1,y:0,duration:.8},'-=.4')
+  .to('.hero-sub',{opacity:1,y:0,duration:.7},'-=.5')
+  .to('.hero-cta',{opacity:1,y:0,duration:.6},'-=.4')
+  .to('.hero-scroll',{opacity:1,y:0,duration:.5},'-=.3');
+
+// section animations
+gsap.from('.about-grid > div:first-child > *',{scrollTrigger:{trigger:'#about',start:'top 70%'},opacity:0,y:40,stagger:.1,duration:.8,ease:'power2.out'});
+gsap.from('#about-canvas-wrap',{scrollTrigger:{trigger:'#about',start:'top 70%'},opacity:0,x:60,duration:1,ease:'power2.out'});
+gsap.from('.exp-item',{scrollTrigger:{trigger:'#experience',start:'top 70%'},opacity:0,y:35,stagger:.12,duration:.8,ease:'power2.out'});
+gsap.from('.proj-card',{scrollTrigger:{trigger:'#projects',start:'top 65%'},opacity:0,y:50,stagger:.09,duration:.7,ease:'power2.out'});
+gsap.from('.stat',{scrollTrigger:{trigger:'#numbers',start:'top 70%'},opacity:0,y:30,stagger:.1,duration:.7});
+gsap.from('.sg',{scrollTrigger:{trigger:'#skills',start:'top 70%'},opacity:0,y:30,stagger:.08,duration:.7});
+gsap.from('.ct-title,.ct-sub,.ct-links',{scrollTrigger:{trigger:'#contact',start:'top 70%'},opacity:0,y:40,stagger:.12,duration:.8});
+
+// counters — use IntersectionObserver so they fire reliably
+const TARGETS = [100, 90, 50, 100];
+document.querySelectorAll('.counter-val').forEach((el, i) => {
+  const target = TARGETS[i];
+  let fired = false;
+  const obs = new IntersectionObserver(entries => {
+    if(entries[0].isIntersecting && !fired){
+      fired = true;
+      let start = null;
+      const duration = 1800;
+      function step(ts){
+        if(!start) start=ts;
+        const prog = Math.min((ts-start)/duration, 1);
+        const ease = 1 - Math.pow(1-prog, 3);
+        el.textContent = Math.round(ease*target);
+        if(prog<1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+      obs.disconnect();
+    }
+  }, {threshold:0.5});
+  obs.observe(el);
+});
+
+// card hover
+document.querySelectorAll('.proj-card').forEach(c=>{
+  c.addEventListener('mouseenter',()=>gsap.to(c,{y:-5,duration:.25,ease:'power2.out'}));
+  c.addEventListener('mouseleave',()=>gsap.to(c,{y:0,duration:.3,ease:'power2.inOut'}));
+});
 </script>
 </body>
 </html>
